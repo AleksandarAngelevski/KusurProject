@@ -3,7 +3,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk
-COPY --from=build /target/Kusur-00.1-SNAPSHOT.jar Kusur.jar
+COPY --from=build /target/kusur-1.0-SNAPSHOT.jar Kusur.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","kusur.jar"]
 
