@@ -5,5 +5,5 @@ RUN mvn clean package -DskipTests
 FROM openjdk
 COPY --from=build /target/kusur-1.0-SNAPSHOT.jar Kusur.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","kusur.jar"]
+ENTRYPOINT ["java","-jar","Kusur.jar"]
 
