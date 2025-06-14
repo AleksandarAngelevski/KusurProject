@@ -4,17 +4,14 @@ import com.kusur.Kusur.dto.UserRegistrationDto;
 import com.kusur.Kusur.repository.UserRepository;
 import com.kusur.Kusur.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import com.kusur.Kusur.entity.User;
+import com.kusur.Kusur.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.kusur.Kusur.util.UniqueTagGenerator;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,21 +24,21 @@ public class CustomUserDetailsService  implements UserDetailsService {
 //    private UserDetailsPasswordService userDetailsPasswordService;
 
     public User registerNewUser(UserRegistrationDto dto){
-        if(userRepository.findByEmail(dto.getEmail()).isPresent()){
+        if(userRepository.findByEmail(dto.email()).isPresent()){
             throw new RuntimeException("Email already exists");
         }
-        if(userRepository.findByUsername(dto.getUsername()).isPresent()){
+        if(userRepository.findByUsername(dto.username()).isPresent()){
             throw new RuntimeException("Username already exists");
         }
         User user = new User();
-        user.setEmail(dto.getEmail());
-        user.setUsername(dto.getUsername());
-        user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+        user.setEmail(dto.email());
+        user.setUsername(dto.username());
+        user.setPassword(new BCryptPasswordEncoder().encode(dto.password()));
         user.setEnabled(false);
         user.setVerificationToken(generateVerificationToken());
-        String uniqueId = UniqueTagGenerator.generateUniqueTag(dto.getUsername());
+        String uniqueId = UniqueTagGenerator.generateUniqueTag(dto.username());
         while(userRepository.findByUniqueId(uniqueId).isPresent()){
-            uniqueId = UniqueTagGenerator.generateUniqueTag(dto.getUsername());
+            uniqueId = UniqueTagGenerator.generateUniqueTag(dto.username());
         }
         user.setUniqueId(uniqueId);
 

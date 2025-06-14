@@ -1,6 +1,6 @@
 package com.kusur.Kusur.controller;
 
-import com.kusur.Kusur.entity.User;
+import com.kusur.Kusur.model.User;
 import com.kusur.Kusur.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

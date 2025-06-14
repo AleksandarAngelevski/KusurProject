@@ -1,7 +1,6 @@
-package com.kusur.Kusur.entity;
+package com.kusur.Kusur.model;
 
 import jakarta.persistence.*;
-// Doprva ke ja pisham
 @Entity
 public class Friendship {
     @Id
@@ -12,5 +11,6 @@ public class Friendship {
     private User requester;
     @ManyToOne
     private User recipient;
-
+    @Enumerated(EnumType.STRING)
+    private FriendshipStatus status;
 }

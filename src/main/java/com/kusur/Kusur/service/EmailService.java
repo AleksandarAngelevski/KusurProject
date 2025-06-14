@@ -1,12 +1,10 @@
 package com.kusur.Kusur.service;
 
-import com.kusur.Kusur.entity.User;
+import com.kusur.Kusur.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import javax.security.auth.Subject;
 
 @Service
 public class EmailService {

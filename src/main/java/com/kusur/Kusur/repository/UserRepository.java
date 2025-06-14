@@ -1,5 +1,5 @@
 package com.kusur.Kusur.repository;
-import com.kusur.Kusur.entity.User;
+import com.kusur.Kusur.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

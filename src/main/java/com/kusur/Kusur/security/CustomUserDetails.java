@@ -1,6 +1,6 @@
 package com.kusur.Kusur.security;
 
-import com.kusur.Kusur.entity.User;
+import com.kusur.Kusur.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

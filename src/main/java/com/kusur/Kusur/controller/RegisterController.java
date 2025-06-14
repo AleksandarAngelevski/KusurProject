@@ -2,17 +2,11 @@ package com.kusur.Kusur.controller;
 
 
 import com.kusur.Kusur.dto.UserRegistrationDto;
-import com.kusur.Kusur.entity.User;
 import com.kusur.Kusur.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.*;
 
 @Controller
 

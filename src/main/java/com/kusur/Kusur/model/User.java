@@ -1,4 +1,4 @@
-package com.kusur.Kusur.entity;
+package com.kusur.Kusur.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
