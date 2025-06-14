@@ -17,4 +17,6 @@ public class KusurApplication {
 		SpringApplication.run(KusurApplication.class, args);
 	}
 
+
+
 }
