@@ -6,3 +6,4 @@ FROM openjdk:17.0.0-jdk-slim
 COPY --from=build /target/Kusur-00.1-SNAPSHOT.jar Kusur.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","kusur.jar"]
+
