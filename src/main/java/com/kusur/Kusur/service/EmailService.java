@@ -2,6 +2,7 @@ package com.kusur.Kusur.service;
 
 import com.kusur.Kusur.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,14 @@ import org.springframework.stereotype.Service;
 public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private Environment environment;
 
 
     public void sendVerificationEmail(User user){
-        String domain = System.getenv("DOMAIN");
+
+        String domain = System.getProperty("DOMAIN_NAME");
+        System.out.println(domain);
         String subject = "Verification Email";
         String verificationLink = "http://"+domain+"/verify?token="+ user.getVerificationToken();
         String message = "Click the link to verify your account:\n"+verificationLink;
