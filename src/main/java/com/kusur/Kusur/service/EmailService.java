@@ -13,8 +13,9 @@ public class EmailService {
 
 
     public void sendVerificationEmail(User user){
+        String domain = System.getenv("DOMAIN");
         String subject = "Verification Email";
-        String verificationLink = "http://localhost:8080/verify?token="+ user.getVerificationToken();
+        String verificationLink = "http://"+domain+"/verify?token="+ user.getVerificationToken();
         String message = "Click the link to verify your account:\n"+verificationLink;
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
