@@ -20,7 +20,7 @@ public class User {
     private String email;
     private boolean enabled;
     private String verificationToken;
-    private String uniqueId;
+    private String nickname;
     public User(){}
     public User(String username,String email, String password) {
         this.username = username;
@@ -68,11 +68,11 @@ public class User {
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
     }
-    public String getUniqueId() {
-        return this.uniqueId;
+    public String getNickname() {
+        return this.nickname;
     }
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
+    public void setNickname(String uniqueId) {
+        this.nickname = uniqueId;
     }
     public Integer getId() {
         return this.id;

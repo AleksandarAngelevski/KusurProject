@@ -4,9 +4,13 @@ package com.kusur.Kusur.controller;
 import com.kusur.Kusur.dto.UserRegistrationDto;
 import com.kusur.Kusur.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 
@@ -20,7 +24,11 @@ public class RegisterController {
 
 
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    public String showRegistrationForm(Model model, Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(principal != null){
+            return "redirect:/home";
+        }
         model.addAttribute("registrationDTO", new UserRegistrationDto());
         return "register";
     }

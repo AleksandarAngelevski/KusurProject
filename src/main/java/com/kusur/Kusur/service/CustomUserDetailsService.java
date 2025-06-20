@@ -36,11 +36,8 @@ public class CustomUserDetailsService  implements UserDetailsService {
         user.setPassword(new BCryptPasswordEncoder().encode(dto.password()));
         user.setEnabled(false);
         user.setVerificationToken(generateVerificationToken());
-        String uniqueId = UniqueTagGenerator.generateUniqueTag(dto.username());
-        while(userRepository.findByUniqueId(uniqueId).isPresent()){
-            uniqueId = UniqueTagGenerator.generateUniqueTag(dto.username());
-        }
-        user.setUniqueId(uniqueId);
+        String nickname = UniqueTagGenerator.generateUniqueTag(dto.username());
+        user.setNickname(nickname);
 
 
         // Send email
