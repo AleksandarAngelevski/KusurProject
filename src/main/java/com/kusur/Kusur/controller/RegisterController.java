@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -33,11 +34,12 @@ public class RegisterController {
         return "register";
     }
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute UserRegistrationDto registrationDTO, Model model) {
+    public String registerUser(@ModelAttribute UserRegistrationDto registrationDTO, Model model, RedirectAttributes redirectAttributes) {
         try{
             System.out.println("Registering user");
             customUserDetailsService.registerNewUser(registrationDTO);
-            return "redirect:/login?registered";
+            redirectAttributes.addAttribute("email",registrationDTO.email());
+            return "redirect:/checkEmail";
         }catch (Exception e){
             model.addAttribute("registrationDTO", new UserRegistrationDto());
             model.addAttribute("error",e.getMessage());

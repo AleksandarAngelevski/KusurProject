@@ -15,6 +15,7 @@ public class EmailService {
     private Environment environment;
 
 
+
     public void sendVerificationEmail(User user){
 
         String domain = System.getProperty("DOMAIN_NAME");
