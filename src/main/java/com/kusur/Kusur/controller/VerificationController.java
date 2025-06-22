@@ -14,6 +14,12 @@ import java.util.Optional;
 public class VerificationController {
     @Autowired
     private UserRepository userRepository;
+    @GetMapping("/checkEmail")
+    public String checkEmail(@RequestParam String email, Model model){
+        model.addAttribute("email",email);
+        System.out.println(email);
+        return "checkEmail";
+    }
 
     @GetMapping("/verify")
     public String verifyUser(@RequestParam("token")  String token, Model model){
