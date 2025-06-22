@@ -77,4 +77,8 @@ public class User {
     public Integer getId() {
         return this.id;
     }
+    @Override
+    public String toString() {
+        return this.username;
+    }
 }

@@ -4,18 +4,21 @@ import com.kusur.Kusur.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
 import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user; // your custom User entity
+    private final User user;
 
     public CustomUserDetails(User user) {
+        if(user ==null){
+            throw new UsernameNotFoundException("User not found");
+        }
         this.user = user;
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Example if you use roles
@@ -42,22 +45,22 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // customize if needed
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // customize if needed
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // customize if needed
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled(); // 💡 This is where email verification is enforced!
+        return user.isEnabled();
     }
 
     public User getUser() {

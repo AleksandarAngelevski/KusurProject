@@ -10,5 +10,17 @@
     <input type="submit" value="Sign Out"/>
 </form>
 <a th:href="@{~/account}">Account</a>
+<div class="add-friend">
+<!--    <form action="#" th:action="@{/add-friend}" th:object="${friend_request}" method="post"><input type="text" name="nickname"><input type="submit"></form>-->
+    <input id="add-friend-field" type="text">
+    <button id="add-friend-btn">Add friend</button>
+</div>
+<div class="friends-container">
+    <ul >
+        <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
+    </ul>
+</div>
+
+<script th:src="@{/script/home.js}"></script>
 </body>
 </html>
