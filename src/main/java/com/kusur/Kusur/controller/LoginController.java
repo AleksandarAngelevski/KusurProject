@@ -1,5 +1,6 @@
 package com.kusur.Kusur.controller;
 
+import com.kusur.Kusur.security.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,7 @@ import java.security.Principal;
 public class LoginController {
 
     @RequestMapping("/login")
-    public String login(Principal principal){
+    public String login(Principal principal) {  
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
 

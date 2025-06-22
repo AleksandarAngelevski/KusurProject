@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
+    <!--   href="../static/style/login.css"  -->
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" th:href="@{style/login.css}" >
 </head>
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+<div class="container">
 
-<a th:href="@{/register}">Register</a>
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div class="row-wrapper"><label> User Name :  </label><input type="text" name="username"/></div>
+        <div class="row-wrapper"><label> Password:</label> <input type="password" name="password"/> </div>
+        <div><input id="submit-btn" type="submit" value="Sign In"/></div>
+    </form>
+    <hr id="horizontal-line">
+    <a th:href="@{/register}" id="register-btn">Register</a>
+</div>
 </body>
 </html>

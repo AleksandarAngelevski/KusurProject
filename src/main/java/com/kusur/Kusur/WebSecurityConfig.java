@@ -2,6 +2,7 @@ package com.kusur.Kusur;
 
 import com.kusur.Kusur.repository.UserRepository;
 import com.kusur.Kusur.service.CustomUserDetailsService;
+import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,13 +32,16 @@ public class WebSecurityConfig {
     CustomUserDetailsService userDetailsService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("!!!!!!!!!!!!1");
+
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/login","/register","/verify").permitAll()
+                        .requestMatchers("/","/login","/register","/verify").permitAll()
+
                         .anyRequest().authenticated()
-                )
+                ).csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .formLogin((form) -> form.loginPage("/login").permitAll())
+                .formLogin((form) -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/").permitAll())
                 .logout((logout) ->logout.permitAll());
 
         return http.build();
@@ -55,4 +60,5 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
