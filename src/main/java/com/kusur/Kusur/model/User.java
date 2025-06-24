@@ -1,10 +1,8 @@
 package com.kusur.Kusur.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -27,28 +25,23 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
-
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getEmail() {
         return email;
     }
-
+    @OneToMany(mappedBy = "Id")
+    private List<GroupMembership> groupMemberships;
     public void setEmail(String email) {
         this.email = email;
     }
@@ -70,6 +63,9 @@ public class User {
     }
     public String getNickname() {
         return this.nickname;
+    }
+    public List<GroupMembership> getGroupMemberships() {
+        return this.groupMemberships;
     }
     public void setNickname(String uniqueId) {
         this.nickname = uniqueId;
