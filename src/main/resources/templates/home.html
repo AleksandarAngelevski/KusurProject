@@ -3,6 +3,8 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Home</title>
+    <!--  href="../static/style/home.css"      -->
+    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}"  >
 </head>
 <body>
 <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
@@ -20,7 +22,24 @@
         <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
     </ul>
 </div>
+<div class="groups-container">
+    <ul>
+        <li th:each="group : ${groups}"><a th:text="${group.name}"></a></li>
+    </ul>
+</div>
+<div id="overlay"></div>
+<button id="create-group-btn">Create group</button>
 
-<script th:src="@{/script/home.js}"></script>
+<div class="create-group-modal">
+    <input type="text" placeholder="Name...">
+    <ul>
+        <li class="user" >Ace</li>
+        <li class="user" >Pece</li>
+        <li class="user">Kaco</li>
+    </ul>
+    <button id="create-group-btn-modal">Create group</button>
+    <span id="close-modal-btn">Close</span>
+</div>
+<script th:src="@{/script/home.js}" src="../static/script/home.js"></script>
 </body>
 </html>
