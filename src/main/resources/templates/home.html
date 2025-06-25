@@ -3,40 +3,52 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Home</title>
-    <!--  href="../static/style/home.css"      -->
-    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}"  >
+    <!-- -->
+    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}" href="../static/style/home.css" >
 </head>
 <body>
-<h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
-<a th:href="@{~/account}">Account</a>
+
+<nav>
+    
+    <a th:href="@{~/account}" id="account">Account</a>
 <div class="add-friend">
-<!--    <form action="#" th:action="@{/add-friend}" th:object="${friend_request}" method="post"><input type="text" name="nickname"><input type="submit"></form>-->
-    <input id="add-friend-field" type="text">
-    <button id="add-friend-btn">Add friend</button>
+    
+    <!--    <form action="#" th:action="@{/add-friend}" th:object="${friend_request}" method="post"><input type="text" name="nickname"><input type="submit"></form>-->
+        <input id="add-friend-field" type="text" placeholder="Username...">
+        <button id="add-friend-btn">Add friend</button>
 </div>
-<div class="friends-container">
-    <ul >
-        <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
-    </ul>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" id="sign-out-btn" value="Sign Out"/>
+</form>
+</nav>  
+<div class="container">
+    <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+    <div class="friends-container">
+        <h3>Friends:</h3>
+        <ul >
+            <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
+        </ul>
+    </div>
+    <div class="groups-container">
+        <h3>Groups:</h3>
+        <ul>
+            <li th:each="group : ${groups}"><a th:text="${group.name}" th:href="@{'~/groups/'+ ${group.id}}"></a></li>
+        </ul>
+    </div>
+    <button id="create-group-btn">Create group</button>
 </div>
-<div class="groups-container">
-    <ul>
-        <li th:each="group : ${groups}"><a th:text="${group.name}"></a></li>
-    </ul>
-</div>
+
 <div id="overlay"></div>
-<button id="create-group-btn">Create group</button>
+
 
 <div class="create-group-modal">
-    <input type="text" placeholder="Name...">
+    <div class="wrappper">
+        <input type="text" placeholder="Name...">
     <ul>
-        <li class="user" >Ace</li>
-        <li class="user" >Pece</li>
-        <li class="user">Kaco</li>
+
     </ul>
+    </div>
     <button id="create-group-btn-modal">Create group</button>
     <span id="close-modal-btn">Close</span>
 </div>

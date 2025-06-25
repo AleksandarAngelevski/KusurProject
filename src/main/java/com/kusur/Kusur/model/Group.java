@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Group {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
@@ -19,6 +19,12 @@ public class Group {
 
     @OneToMany(mappedBy = "group")
     private List<GroupMembership> members;
+
+    public Group(String name, User owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+    public Group() {}
     @Override
     public String toString() {
         return name;
