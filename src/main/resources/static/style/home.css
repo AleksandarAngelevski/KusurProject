@@ -16,6 +16,19 @@ body{
     width: 100%;
     height: 100vh - 100px;
     padding: 1rem 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.container .left{
+    width: 30%;
+}
+.container .right{
+    width: 30%;
+}
+.container .middle{
+    width: 40%;
 }
 .create-group-modal{
     display: none;
@@ -60,7 +73,6 @@ body{
     background-color: var(--secondary-color);
 }
 .create-group-modal ul{
-    
     list-style: none;  
 }
 #overlay{
@@ -78,10 +90,11 @@ body{
     color: #FFFFFF;
     font-size: 1.5rem;
 }
-#close-modal-btn{
+.close-modal-btn{
     position: absolute;
     top: 0;
     left: 90%;
+    z-index: 101;
 }
 nav{
     background-color: var(--main-bg-color);
@@ -133,9 +146,55 @@ nav .add-friend{
     align-items: center;
 }
 
+.container .left .friends-container ul,.container .left .groups-container ul{
+    list-style: none;
+}
 
+/* ADD EXPENSE MODAL */
+.container .right .addExpense-container{
+    background-color: peru;
+    width: 100%;
+    height: 100%;
+}
+.add-expense-modal{
+    display: none;
+    background-color: var(--main-bg-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    min-height: 300px;
+    z-index: 1000;
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+
+.choices .choice{
+    transition: height 0.5s ease;
+    min-height: 30px;
+    overflow: hidden;
+
+    width: 100px;
+}
+.choices .choice .person{
+    height: 30px;
+    width: 100%;
+}
+.activeChoice{
+    transition:height 1s ease;;
+    background-color: yellow;
+}
 @media only screen and (max-width: 1400px) {
     .container,nav{
         padding: 1rem 100px;
     }
   }
+
+
+.activeGroupMember{
+    background-color: violet;
+}
