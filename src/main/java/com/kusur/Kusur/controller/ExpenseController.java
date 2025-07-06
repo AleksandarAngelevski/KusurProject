@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ExpenseController {
 
-    @PostMapping
+    @PostMapping("/expense/add")
     public Expense addExpense(@RequestBody ExpenseDto expense, @AuthenticationPrincipal CustomUserDetails user){
+        System.out.println(expense);
         return new Expense();
     }
 

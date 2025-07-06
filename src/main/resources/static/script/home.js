@@ -1,4 +1,4 @@
-import { addPersonToExpense,clearMembers } from "./expenseModlue.js";
+import { addPersonToExpense,clearMembers,addExpense} from "./expenseModlue.js";
 
 
 
@@ -7,6 +7,8 @@ const add_friend_button = document.querySelector("#add-friend-btn")
 const add_friend_input_field = document.querySelector("#add-friend-field")
 const createGroupBtn = document.querySelector("#create-group-btn");
 const add_expense_btn = document.querySelector("#add-expense-btn")
+
+document.querySelector(".add-expense-modal .wrapper button").addEventListener("click",addExpense);
 
 createGroupBtn.addEventListener("click",openFriendsModal);
 add_expense_btn.addEventListener("click",openExpenseModal)
@@ -187,6 +189,7 @@ function insertGroups(groups){
         group.classList.add("group");
         group.textContent = elem.name;
         group.setAttribute("id",elem.id)
+        group.setAttribute("groupId",elem.id)
         group.addEventListener("click",selectGroup);
         choice.insertAdjacentElement("beforeend",group);
         holder.insertAdjacentElement("beforeend",choice);

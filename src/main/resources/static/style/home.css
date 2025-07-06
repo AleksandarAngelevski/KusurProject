@@ -55,7 +55,7 @@ body{
     height: 30px;
     outline: none;
     border: none;
-    margin: .5rem;   
+    margin: .5rem;
 }
 .create-group-modal .wrappper ul{
     width: 100%;
@@ -171,8 +171,36 @@ nav .add-friend{
     gap: 15px;
     justify-content: space-between;
 }
+.add-expense-modal .wrapper{
+    border-radius: 25px;
+    overflow: hidden;
+}
+.add-expense-modal .wrapper button{
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: .8rem;
+    border: none;
+    background-color: var(--secondary-color);
+    color: #FFFFFF;
+    height: 50px;
+}
+.add-expense-modal .wrapper input{
+    outline: none;
+    height: 50px;
+    border: none;
+    font-size: 1.5rem;
+    width: 50%;
+    padding: 5px 30px;
+    
 
-
+}
+.add-expense-modal .wrapper #description{
+    padding: 5px 30px;
+    
+}
+.add-expense-modal .wrapper .row1,.add-expense-modal .wrapper .row2{
+    display: flex;
+}
 .choices .choice{
     transition: height 0.5s ease;
     min-height: 30px;
