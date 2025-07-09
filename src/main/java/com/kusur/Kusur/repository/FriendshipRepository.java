@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface FriendshipRepository extends CrudRepository<Friendship,Long> {
+public interface FriendshipRepository extends JpaRepository<Friendship,Long> {
     List<Friendship> findFriendshipsBySender(User sender);
     List<Friendship> findFriendshipsByReceiver(User receiver);
     Optional<Friendship> findBySenderAndReceiver(User sender, User receiver);

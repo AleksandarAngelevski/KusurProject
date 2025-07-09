@@ -4,21 +4,31 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "expense_splits")
-public class Expense_split {
+public class ExpenseSplit {
     @Id
+    @JoinColumn(name = "expense_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "expense_id")
     private Expense expense;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
     private Double amount;
-    public Expense_split(Expense expense, User user, Double amount) {
+    private Boolean settled;
+    public ExpenseSplit(Expense expense, User user,Group group, Double amount) {
         this.expense = expense;
         this.user = user;
         this.amount = amount;
+        this.group = group;
+        this.settled = false;
     }
-    public Expense_split() {}
+    public ExpenseSplit() {}
+    public void settleExpense() {
+        this.settled = true;
+    }
+
 }

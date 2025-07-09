@@ -38,7 +38,14 @@
             <button id="create-group-btn">Create group</button>
         </div>
     </div>
-    <div class="middle"><h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1></div>
+    <div class="middle">
+        <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+        <div class="expenses-container">
+            <div class="expense" th:each="expense : ${expenses}"><h1 th:text="${expense.description} + ' - Total: '+${expense.amount} + 'MKD'"></h1><ul>
+                <li th:text="'Created by:'+${expense.creator}"></li>
+            </ul></div>
+        </div>
+    </div>
     <div class="right">
         <div class="addExpense-container">
             <button id="add-expense-btn">Add Expense</button>

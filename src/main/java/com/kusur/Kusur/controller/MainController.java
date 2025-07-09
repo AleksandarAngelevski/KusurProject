@@ -10,6 +10,7 @@ import com.kusur.Kusur.repository.GroupRepository;
 import com.kusur.Kusur.repository.UserRepository;
 import com.kusur.Kusur.security.CustomUserDetails;
 import com.kusur.Kusur.service.GroupService;
+import com.kusur.Kusur.service.SplitExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,6 +38,8 @@ public class MainController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    SplitExpenseService splitExpenseService;
+    @Autowired
     MainController(GroupService groupService,GroupRepository groupRepository){
         this.groupService = groupService;
         this.groupRepository = groupRepository;
@@ -51,11 +54,13 @@ public class MainController {
         List<User> f1 = new ArrayList<>(friendshipRepository.findFriendshipsBySender(principal.getUser()).stream().map(f -> f.getReceiver()).toList());
         List<User> f2 = friendshipRepository.findFriendshipsByReceiver(principal.getUser()).stream().map( f -> f.getSender()).toList();
         f1.addAll(f2);
-        System.out.println("::::::::::::");
+        List<Expense> expenses = splitExpenseService.getExpenses(principal.getUser());
         System.out.println(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()));
         List<Group> groups = new ArrayList<>(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).collect(Collectors.toList()));
         model.addAttribute("groups",groups);
         model.addAttribute("friends", f1);
+        model.addAttribute("expenses",expenses);
+        System.out.println(expenses);
         return "home.html";
     }
     @GetMapping("/account")

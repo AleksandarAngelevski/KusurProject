@@ -1,4 +1,4 @@
-import { addPersonToExpense,clearMembers,addExpense} from "./expenseModlue.js";
+import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup} from "./expenseModlue.js";
 
 
 
@@ -88,6 +88,10 @@ function closeModal(e){
     document.querySelector(".create-group-modal").style.display="none";
     document.querySelector(".add-expense-modal").style.display="none";
     document.querySelector(".add-expense-modal .choices").innerHTML="";
+    document.querySelector(".add-expense-modal .wrapper input").value="";
+    document.querySelector(".add-expense-modal .wrapper #description").value="";
+    clearGroup();
+    clearUser();
 }
 
 let createGroupSubmitButton = document.querySelector("#create-group-btn-modal");
@@ -172,7 +176,7 @@ function insertChoices(data){
         let person = document.createElement("div");
         person.classList.add("person");
         person.textContent= elem.username;
-        person.addEventListener("click",select);
+        person.addEventListener("click",selectUser);
         choice.insertAdjacentElement("beforeend",person);
         holder.insertAdjacentElement("beforeend",choice);
     })
@@ -241,14 +245,27 @@ function select(e){
     }
     
 }
-
-async function selectGroup(e){
-    clearMembers();
+function selectUser(e){
+    clearGroup();
+    clearUser();
     if(activeElement===e.target.parentElement){
-        
+        select(e);
+    }else{
+        select(e);
+        addUserToExpense(e.target.textContent);
+
+    }
+
+}
+async function selectGroup(e){
+    
+    clearUser();
+    if(activeElement===e.target.parentElement){
+        clearGroup();
         select(e);
         
     }else{
+        getGroupId(e);
         select(e);
         const host = window.location.host;
         const token = localStorage.getItem("token");

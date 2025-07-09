@@ -50,7 +50,7 @@ body{
 }
 .container #register-btn{
     background-color: var(--main-bg-color);
-    padding: 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 1rem;
     min-width: 60px;
     text-decoration: none;
@@ -61,7 +61,7 @@ body{
 }
 .container form #submit-btn{
     background-color: var(--main-bg-color);
-    padding: 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 1rem;
     min-width: 60px;
     outline: none;
