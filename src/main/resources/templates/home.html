@@ -3,43 +3,91 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Home</title>
-    <!--  href="../static/style/home.css"      -->
-    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}"  >
+    <!-- -->
+    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}" href="../static/style/home.css" >
 </head>
 <body>
-<h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
-<a th:href="@{~/account}">Account</a>
-<div class="add-friend">
-<!--    <form action="#" th:action="@{/add-friend}" th:object="${friend_request}" method="post"><input type="text" name="nickname"><input type="submit"></form>-->
-    <input id="add-friend-field" type="text">
-    <button id="add-friend-btn">Add friend</button>
-</div>
-<div class="friends-container">
-    <ul >
-        <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
-    </ul>
-</div>
-<div class="groups-container">
-    <ul>
-        <li th:each="group : ${groups}"><a th:text="${group.name}"></a></li>
-    </ul>
-</div>
-<div id="overlay"></div>
-<button id="create-group-btn">Create group</button>
 
-<div class="create-group-modal">
-    <input type="text" placeholder="Name...">
-    <ul>
-        <li class="user" >Ace</li>
-        <li class="user" >Pece</li>
-        <li class="user">Kaco</li>
-    </ul>
-    <button id="create-group-btn-modal">Create group</button>
-    <span id="close-modal-btn">Close</span>
+<nav>
+    
+    <a th:href="@{~/account}" id="account">Account</a>
+<div class="add-friend">
+    
+    <!--    <form action="#" th:action="@{/add-friend}" th:object="${friend_request}" method="post"><input type="text" name="nickname"><input type="submit"></form>-->
+        <input id="add-friend-field" type="text" placeholder="Username...">
+        <button id="add-friend-btn">Add friend</button>
 </div>
-<script th:src="@{/script/home.js}" src="../static/script/home.js"></script>
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" id="sign-out-btn" value="Sign Out"/>
+</form>
+</nav>  
+<div class="container">
+    <div class="left">
+        <div class="friends-container">
+            <h3>Friends:</h3>
+            <ul >
+                <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
+            </ul>
+        </div>
+        <div class="groups-container">
+            <h3>Groups:</h3>
+            <ul>
+                <li th:each="group : ${groups}"><a th:text="${group.name}" th:href="@{'~/groups/'+ ${group.id}}"></a></li>
+            </ul>
+            <button id="create-group-btn">Create group</button>
+        </div>
+    </div>
+    <div class="middle">
+        <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+        <div class="expenses-container">
+            <div class="expense" th:each="expense : ${expenses}"><h1 th:text="${expense.description} + ' - Total: '+${expense.amount} + 'MKD'"></h1><ul>
+                <li th:text="'Created by:'+${expense.creator}"></li>
+            </ul></div>
+        </div>
+    </div>
+    <div class="right">
+        <div class="addExpense-container">
+            <button id="add-expense-btn">Add Expense</button>
+        </div>
+    </div>
+    
+    
+    
+</div>
+
+<div id="overlay"></div>
+    <div class="add-expense-modal" style="display: none;">
+        <div class="wrapper">
+            <div class="row1">
+                <input type="text" name="" id="sum" placeholder="Sum..." style="width: 50%;"><button style="width: 50%;">Add expense</button>
+            </div>
+            <div class="row2">
+                <input type="text" name="" id="description" placeholder="Description..." style="width: 100%;">
+            </div>
+        </div>
+        <div class="choices">
+            <!-- <div class="choice"><div class="person"></div></div>
+            <div class="choice"><div class="person"></div></div>
+            <div class="choice"><div class="person"></div></div>
+            <div class="choice"><div class="person"></div></div> -->
+        </div>
+        <span class="close-expense-modal-btn close-modal-btn">Close</span>
+    </div>
+    <div class="create-group-modal">
+
+        <div class="wrappper">
+            <input type="text" placeholder="Name...">
+        <ul>
+            
+        </ul>
+        </div>
+        <button id="create-group-btn-modal">Create group</button>
+        <span class="close-friends-modal-btn close-modal-btn">Close</span>
+    </div>
+
+
+<!-- <script  th:src="@{/script/expenseModlue.js}" type="module" src="../static/script/expenseModlue.js"></script> -->
+<script th:src="@{/script/home.js}" type="module" src="../static/script/home.js"></script>
 </body>
 </html>

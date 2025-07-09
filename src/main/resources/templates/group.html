@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title th:text="${group.name}"></title>
+    <!-- -->
+    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}" href="../static/style/home.css" >
+</head>
+<body>
+    <div class="members-container">
+        <ul >
+            <li th:each="user : ${users}" ><a th:href="@{'~/friends/' +${user.username}}" th:text="${user.username}"></a></li>
+        </ul>
+    </div>
+</body>
+</html>

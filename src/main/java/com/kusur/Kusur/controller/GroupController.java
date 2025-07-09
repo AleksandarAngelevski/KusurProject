@@ -1,24 +1,38 @@
 package com.kusur.Kusur.controller;
 
+import com.kusur.Kusur.dto.GroupCreationDto;
+import com.kusur.Kusur.dto.GroupDto;
+import com.kusur.Kusur.dto.UserDetailsDto;
 import com.kusur.Kusur.model.Group;
 import com.kusur.Kusur.model.GroupMembership;
 import com.kusur.Kusur.model.User;
 import com.kusur.Kusur.repository.GroupMembershipRepository;
 import com.kusur.Kusur.repository.GroupRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import com.kusur.Kusur.repository.UserRepository;
+import com.kusur.Kusur.security.CustomUserDetails;
+import com.kusur.Kusur.service.GroupService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class GroupController {
+    @Autowired
+    GroupService groupService;
+    @Autowired
     GroupMembershipRepository groupMembershipRepository;
+    @Autowired
     GroupRepository groupRepository;
+    @Autowired
+    UserRepository userRepository;
     GroupMembership groupMembership;
     @GetMapping("/group/{id}")
-    public Group getGroup(){
+    public Group getGroup(@PathVariable Integer id){
         return new Group();
     }
     @GetMapping("/group/")
@@ -26,9 +40,23 @@ public class GroupController {
         return new ArrayList<>();
     }
 
-    @GetMapping("/group/getAll/{username}")
-    public List<Group> getAllGroupMemberships(@PathVariable String username){
-        return new ArrayList<>();
+    @GetMapping("/group/getAll")
+    public List<GroupDto> getAllGroupMemberships(@AuthenticationPrincipal CustomUserDetails principal){
+        List<GroupDto> groups = new ArrayList<>(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).map(e -> new GroupDto(e.getName(),e.getId())).collect(Collectors.toList()));
+        System.out.println(groups);
+        return groups;
     }
+    @GetMapping("/group/{id}/members")
+    public List<UserDetailsDto> getGroupMembers(@PathVariable Integer id, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        return groupMembershipRepository.findGroupMembershipsByGroup(groupRepository.findGroupById(id).orElseThrow()).stream().map((gm)->new UserDetailsDto(gm.getMember().getUsername(),gm.getMember().getEmail(),gm.getMember().getNickname())).collect(Collectors.toList());
+    }
+    
 
+    @PostMapping("/group/create")
+        public ResponseEntity createGroup(@RequestBody GroupCreationDto groupCreationDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+            groupService.createGroup(groupCreationDto,customUserDetails);
+            System.out.println(groupCreationDto.groupName());
+            System.out.println(groupCreationDto.users());
+            return  ResponseEntity.ok().body("Group created successfully");
+        }
 }

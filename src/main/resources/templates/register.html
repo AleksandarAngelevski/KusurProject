@@ -3,7 +3,7 @@
 <head>
     <title>Register</title>
      <!-- href="../static/style/register.css "-->
-     <link rel="stylesheet" type="text/css" th:href="@{style/login.css}"  >
+     <link rel="stylesheet" type="text/css" th:href="@{style/register.css}"  >
 </head>
 <body>
 
@@ -26,6 +26,7 @@
         
         <button type="submit" id="submit-btn">Register</button>
     </form>
+    <a th:href="@{/login}" id="login-btn">Login</a>
     <div th:if="${error}" th:text="${error}" style="color:red;"></div>
 </div>
 </body>

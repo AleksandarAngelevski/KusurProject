@@ -2,7 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Check email</title>
-
+    <style>
+        body{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #4c987e;
+            
+        }
+        body h1{
+            color: #FFFF;
+        }
+    </style>
 </head>
 <body>
     <h1>Successfully created an account please check your email at <span th:text="${email}"></span></h1>

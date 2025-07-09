@@ -50,13 +50,13 @@ body{
 }
 .container #register-btn{
     background-color: var(--main-bg-color);
-    padding: 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 1rem;
     min-width: 60px;
 }
 .container form #submit-btn{
     background-color: var(--main-bg-color);
-    padding: 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 1rem;
     min-width: 60px;
     font-size: 1.5rem;
@@ -67,4 +67,15 @@ body{
 .container #horizontal-line{
     width: 85%;
     border: 1px solid var(--main-bg-color);
+}
+.container #login-btn{
+    background-color: var(--main-bg-color);
+    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+    min-width: 60px;
+    text-decoration: none;
+}
+.container #login-btn:visited{
+    color: #FFFFFF;
+    text-decoration: none;
 }

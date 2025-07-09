@@ -1,5 +1,6 @@
 package com.kusur.Kusur.controller;
 
+import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.kusur.Kusur.dto.UserDetailsDto;
 import com.kusur.Kusur.model.*;
@@ -8,6 +9,8 @@ import com.kusur.Kusur.repository.GroupMembershipRepository;
 import com.kusur.Kusur.repository.GroupRepository;
 import com.kusur.Kusur.repository.UserRepository;
 import com.kusur.Kusur.security.CustomUserDetails;
+import com.kusur.Kusur.service.GroupService;
+import com.kusur.Kusur.service.SplitExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,14 +28,23 @@ import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
+    GroupService groupService;
     @Autowired
     FriendshipRepository  friendshipRepository;
     @Autowired
-    GroupRepository groupRepository;
+    GroupRepository     groupRepository;
     @Autowired
     GroupMembershipRepository groupMembershipRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    SplitExpenseService splitExpenseService;
+    @Autowired
+    MainController(GroupService groupService,GroupRepository groupRepository){
+        this.groupService = groupService;
+        this.groupRepository = groupRepository;
+    }
+
     @GetMapping("/")
     public String index() {
         return "redirect:/home";
@@ -42,9 +54,13 @@ public class MainController {
         List<User> f1 = new ArrayList<>(friendshipRepository.findFriendshipsBySender(principal.getUser()).stream().map(f -> f.getReceiver()).toList());
         List<User> f2 = friendshipRepository.findFriendshipsByReceiver(principal.getUser()).stream().map( f -> f.getSender()).toList();
         f1.addAll(f2);
+        List<Expense> expenses = splitExpenseService.getExpenses(principal.getUser());
+        System.out.println(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()));
         List<Group> groups = new ArrayList<>(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).collect(Collectors.toList()));
         model.addAttribute("groups",groups);
         model.addAttribute("friends", f1);
+        model.addAttribute("expenses",expenses);
+        System.out.println(expenses);
         return "home.html";
     }
     @GetMapping("/account")
@@ -68,5 +84,14 @@ public class MainController {
         }
         return "account.html";
 
+    }
+    @GetMapping("/groups/{id}")
+    public String group(Model model ,@AuthenticationPrincipal CustomUserDetails principal, @PathVariable Integer id){
+
+        Group g = groupRepository.findGroupById(id).orElseThrow();
+        model.addAttribute("group",g);
+        List<UserDetailsDto> users = groupService.getGroupMembers(groupRepository.findGroupById(id).orElseThrow());
+        model.addAttribute("users",users);
+        return "group";
     }
 }
