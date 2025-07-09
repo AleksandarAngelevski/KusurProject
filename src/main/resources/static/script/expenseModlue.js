@@ -46,7 +46,7 @@ export async function addExpense(e){
     else{
         const host = window.location.host;
         const token = localStorage.getItem("token");
-        const response = await fetch("http://"+host+"/expense/add",{
+        const response = await fetch("https://"+host+"/expense/add",{
             method: "POST",
             credentials: "include",
             headers:{
