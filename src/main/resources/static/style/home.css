@@ -6,6 +6,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 
 }
 body{
@@ -40,9 +41,10 @@ body{
     width: 400px;
     min-height: 300px;
     z-index: 1000;
-    padding: 1rem 1.5rem;
+    padding: 2rem 2rem;
     flex-direction: column;
     gap: 15px;
+    color: #4C8C7A;
     justify-content: space-between;
 }
 .create-group-modal .wrappper{
@@ -56,6 +58,9 @@ body{
     outline: none;
     border: none;
     margin: .5rem;
+    font-size: 1.7rem;
+    padding: 1.5rem .5rem;
+    border-radius: 15px;
 }
 .create-group-modal .wrappper ul{
     width: 100%;
@@ -90,11 +95,22 @@ body{
     color: #FFFFFF;
     font-size: 1.5rem;
 }
+.create-group-modal ul .user:hover{
+    cursor: pointer;
+}
+
+.create-group-modal #create-group-btn-modal:hover{
+    cursor: pointer;
+}
+.close-modal-btn:hover{
+    cursor: pointer;
+}
 .close-modal-btn{
     position: absolute;
-    top: 0;
-    left: 90%;
+    top: 3%;
+    left: 88%;
     z-index: 101;
+    color: black;
 }
 nav{
     background-color: var(--main-bg-color);
@@ -111,6 +127,9 @@ nav #account{
     color: #FFFFFF;
     
 }
+nav form #sign-out-btn:hover{
+    cursor: pointer;
+}
 nav form #sign-out-btn{
     font-size: 1.3rem;
     font-weight: bold;
@@ -120,6 +139,10 @@ nav form #sign-out-btn{
     background-color: var(--secondary-color);
     color: #FFFFFF;
 }
+nav .add-friend #add-friend-btn:hover{
+    cursor: pointer;
+}
+
 nav .add-friend #add-friend-btn{
     font-size: 1.3rem;
     font-weight: bold;
@@ -149,12 +172,23 @@ nav .add-friend{
 .container .left .friends-container ul,.container .left .groups-container ul{
     list-style: none;
 }
-
+.container .left a{
+    color: black;
+    text-decoration: none;
+    font-size: 1.5rem;
+    padding: 0 .5rem;
+}
+.container .left a:visited{
+    color: black;
+    text-decoration: none;
+    font-size: 15rem;
+    padding: 0 .5rem;
+}
 /* ADD EXPENSE MODAL */
 .container .right .addExpense-container{
-    background-color: peru;
     width: 100%;
     height: 100%;
+
 }
 .add-expense-modal{
     display: none;
@@ -166,7 +200,7 @@ nav .add-friend{
     width: 400px;
     min-height: 300px;
     z-index: 1000;
-    padding: 1rem 1.5rem;
+    padding: 2rem 2rem;
     flex-direction: column;
     gap: 15px;
     justify-content: space-between;
@@ -201,20 +235,36 @@ nav .add-friend{
 .add-expense-modal .wrapper .row1,.add-expense-modal .wrapper .row2{
     display: flex;
 }
+
+.add-expense-modal .wrapper .row1 button:hover{
+    cursor: pointer;
+}
 .choices .choice{
     transition: height 0.5s ease;
     min-height: 30px;
     overflow: hidden;
-
-    width: 100px;
+    color:#FFFFFF;
+    width: 100%;
 }
 .choices .choice .person{
     height: 30px;
     width: 100%;
+    font-size: 1.2rem;
+}
+.choices .choice .group{
+    height: 30px;
+    width: 100%;
+    font-size: 1.2rem;
+}
+.choices .choice{
+    cursor: pointer;
+}
+.choice .choice #groupMembers li:hover{
+    cursor:pointer;
 }
 .activeChoice{
     transition:height 1s ease;;
-    background-color: yellow;
+    background-color: var(--secondary-color);
 }
 @media only screen and (max-width: 1400px) {
     .container,nav{
@@ -224,5 +274,78 @@ nav .add-friend{
 
 
 .activeGroupMember{
-    background-color: violet;
+    background-color: #14716a;
+}
+
+#create-group-btn:hover #one,#create-group-btn:hover #two{
+    background-color: #55ad8e;
+    transition: ease .5s;
+}
+#create-group-btn:hover {
+    cursor:pointer;
+    background-color:none;
+    transition: ease .5s;
+    border-color: #55ad8e;
+    transition: ease .5s;
+}
+#create-group-btn{
+    border: none;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--main-bg-color);
+    border-radius: 50%;
+    background:none;
+    margin: .2rem;
+    transition: ease .5s;
+}
+#create-group-btn #one,#create-group-btn #two{
+    display: block;
+    transition: ease .5s;
+}
+#create-group-btn #one{
+    width: 10px;
+    height: 30px;
+    background-color: var(--main-bg-color);
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+#create-group-btn #two{
+    width: 30px;
+    height: 10px;
+    top:50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    background-color: var(--main-bg-color);
+}
+
+
+
+.left .groups-container #create-group-btn{
+    margin: 5px 0;
+}
+.left .friends-container h3,.left .groups-container h3{
+    font-size: 3rem;
+}
+
+.addExpense-container #add-expense-btn{
+    font-size: 2rem;
+    background-color: rebeccapurple;
+    padding: 1rem;
+    border-radius: 25px;
+    color: #FFFFFF;
+    background-color: var(--main-bg-color);
+    outline: navajowhite;
+    border: none;
+    font-weight: bold;
+    transition: ease .5s;
+}
+.addExpense-container #add-expense-btn:hover{
+    cursor: pointer;
+    background-color: #55ad8e;
+    transition: ease;
+    transition: ease .5s;
 }

@@ -4,7 +4,7 @@
 <head>
     <title>Home</title>
     <!-- -->
-    <link rel="stylesheet" type="text/css" th:href="@{style/home.css}" href="../static/style/home.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{/style/home.css}" href="../static/style/home.css" >
 </head>
 <body>
 
@@ -32,10 +32,10 @@
         </div>
         <div class="groups-container">
             <h3>Groups:</h3>
+            <button id="create-group-btn"><span id="one"></span><span id="two"></span></button>
             <ul>
                 <li th:each="group : ${groups}"><a th:text="${group.name}" th:href="@{'~/groups/'+ ${group.id}}"></a></li>
             </ul>
-            <button id="create-group-btn">Create group</button>
         </div>
     </div>
     <div class="middle">
