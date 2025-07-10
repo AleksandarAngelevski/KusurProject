@@ -39,10 +39,10 @@ let closeModalBtn = document.querySelector(".close-friends-modal-btn");
 
 closeModalBtn.addEventListener("click",closeModal);
 const groupModal = document.querySelector(".create-group-modal");
-let ul = document.querySelector(".create-group-modal ul").addEventListener("click", addUser);
+let ul = document.querySelector(".create-group-modal ul").addEventListener("click", addUserToGroup);
 // REQUEST BODY
 let body = new Set();
-function addUser(e){
+function addUserToGroup(e){
     if(e.target.tagName.toLowerCase() == "ul") return;
     e.target.classList.toggle("selected")
     toggle(e.target.textContent)
@@ -73,6 +73,7 @@ function toggle(name){
     }else{
         body.add(name);
     }
+    console.log(body)
 }
 function insertNames(data){
     let names=JSON.parse(data);
@@ -111,8 +112,6 @@ createGroupSubmitButton.addEventListener("click",(e)=>{
 async function makeRequest(e){
     arr = Array.from(body);
     
-    
-
     groupName= document.querySelector(".create-group-modal .wrappper input").value;
     const host = window.location.host;
     

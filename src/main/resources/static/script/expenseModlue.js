@@ -21,6 +21,7 @@ export function addPersonToExpense(e){
 }
 export function addUserToExpense(username){ // dumb function name, can't think of a better ona atm.
     groupExpenseDto.userId=username;
+    console.log(groupExpenseDto);
 }
 export function clearGroup(){    
     groupExpenseDto.groupId=null;
