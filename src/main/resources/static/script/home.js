@@ -29,7 +29,7 @@ async function send_request(){
             "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({username:add_friend_input_field.value.trim()}),
-    }).then(response => response.text()).then(data => alert(data)).finally(alert("Like"));
+    }).then(response => response.text()).then(data => alert(data)).finally();
     alert(response.statusText);
 }
 
