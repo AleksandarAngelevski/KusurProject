@@ -1,7 +1,8 @@
 import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup} from "./expenseModlue.js";
 
 
-
+let arr;
+let groupName;
 let startHeight;
 const add_friend_button = document.querySelector("#add-friend-btn")
 const add_friend_input_field = document.querySelector("#add-friend-field")
@@ -28,7 +29,7 @@ async function send_request(){
             "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({username:add_friend_input_field.value.trim()}),
-    }).then(response => response.text()).then(data => alert(data)).finally(alert("Like"));
+    }).then(response => response.text()).then(data => alert(data)).finally();
     alert(response.statusText);
 }
 
@@ -105,12 +106,12 @@ createGroupSubmitButton.addEventListener("click",(e)=>{
     if(body.size==0){
         alert("Select minimum one friend");
     }else{
-        makeRequest(e);
+    makeRequest(e);
     }
 });
 
 async function makeRequest(e){
-    arr = Array.from(body);
+    arr = Array.from(body); 
     
     groupName= document.querySelector(".create-group-modal .wrappper input").value;
     const host = window.location.host;
