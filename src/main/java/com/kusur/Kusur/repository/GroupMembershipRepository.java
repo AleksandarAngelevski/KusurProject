@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface GroupMembershipRepository extends JpaRepository<GroupMembership,Integer> {
     List<GroupMembership> findGroupMembershipByMember(User member);
     List<GroupMembership> findGroupMembershipsByGroup(Group group);
+    Optional<GroupMembership> findGroupMembershipByMemberAndGroup(User member,Group group);
 }
