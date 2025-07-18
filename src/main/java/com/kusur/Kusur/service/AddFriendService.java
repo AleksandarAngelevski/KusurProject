@@ -42,5 +42,10 @@ public class AddFriendService {
         List<UserDetailsDto> userDetailsDtos = f1.stream().map((u)-> new UserDetailsDto(u.getUsername(),u.getEmail(),u.getNickname())).collect(Collectors.toList());
         return userDetailsDtos;
     }
+    public boolean friendshipExists(String user, String receiver){
+        User s = userRepository.findByUsername(user).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        User r = userRepository.findByUsername(receiver).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        return friendshipRepository.existsBySenderAndReceiver(s,r) || friendshipRepository.existsBySenderAndReceiver(r,s);
+    }
 }
 

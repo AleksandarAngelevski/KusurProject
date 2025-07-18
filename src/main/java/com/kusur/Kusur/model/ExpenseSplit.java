@@ -15,6 +15,9 @@ public class ExpenseSplit {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
+    @JoinColumn(name ="owed_to")
+    private User owedTo;
+    @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
     private Double amount;
@@ -30,5 +33,10 @@ public class ExpenseSplit {
     public void settleExpense() {
         this.settled = true;
     }
-
+    public Double getAmount() {
+        return this.amount;
+    }
+    public void settle(){
+        this.settled = true;
+    }
 }

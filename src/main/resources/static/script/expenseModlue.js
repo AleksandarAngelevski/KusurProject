@@ -1,5 +1,5 @@
 const priceField = document.querySelector(".add-expense-modal .wrapper input");
-const reg= /^[1-9]\d*$/;
+const reg= /^[1-9]\d*(\.\d+)?$/;
 let id=null;
 
 let groupExpenseDto ={
@@ -33,9 +33,7 @@ export function clearUser(){
 }
 export async function addExpense(e){
     groupExpenseDto.description=document.querySelector("#description").value;
-    groupExpenseDto.amount=document.querySelector("#sum").value;
-    
-    
+    groupExpenseDto.amount=Number(document.querySelector("#sum").value);
     if(!priceField.value.match(reg)){
         alert("Enter a valid input!! \n ex. 100 ");
     }else if(groupExpenseDto.groupId===null && groupExpenseDto.userId===null){
@@ -57,10 +55,17 @@ export async function addExpense(e){
             },
             body: JSON.stringify(groupExpenseDto),
             
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if(!response.ok){
+                return response.json().then(errorData => {
+                    throw new Error(errorData.description || "Unknown error");
+                })
+            }
+            return response.json();
+        }).then(data => {
             console.log(data);
-            insertExpense(data)
-        }).catch(err => console.log(err)).finally(()=>{
+            insertExpense(data);
+        }).catch(err => alert(err.message)).finally(()=>{
             document.querySelector("#overlay").style.display="none";
             document.querySelector(".create-group-modal ul").innerHTML="";
             document.querySelector(".create-group-modal").style.display="none";
@@ -68,6 +73,7 @@ export async function addExpense(e){
             document.querySelector(".add-expense-modal .choices").innerHTML="";
             document.querySelector(".add-expense-modal .wrapper input").value="";
             document.querySelector(".add-expense-modal .wrapper #description").value="";
+            
             clearGroup();
             clearUser();
         });
@@ -78,9 +84,9 @@ export async function addExpense(e){
 function insertExpense(expenseResponse){
     let elem = document.createElement("div");
     let h1= document.createElement("h1");
-    let list = `<ul><li>Created by: ${expenseResponse.userId}</li></ul>`
-    
-    h1.textContent = `${expenseResponse.description} - Total: ${expenseResponse.amount} MKD`;
+    let list = `<ul><li>Created by: ${expenseResponse.creatorId}</li></ul>`
+    console.log(expenseResponse)
+    h1.textContent = `${expenseResponse.description} - Total: ${Number(expenseResponse.amount).toFixed(1)}MKD`;
     elem.classList.add("expense")
     
     elem.insertAdjacentElement("afterbegin",h1)

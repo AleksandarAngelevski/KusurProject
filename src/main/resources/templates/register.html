@@ -3,7 +3,8 @@
 <head>
     <title>Register</title>
      <!-- href="../static/style/register.css "-->
-     <link rel="stylesheet" type="text/css" th:href="@{style/register.css}"  >
+     <link rel="stylesheet" type="text/css" th:href="@{style/register.css}" href="../static/style/register.css"  >
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
@@ -20,14 +21,38 @@
         </div>
         <div class="row-wrapper">
             <label>Password:</label>
-            <input type="password" th:field="*{password}" required/>
+            <div id="input-wrapper">
+                <input type="password" th:field="*{password}" required/>
+                <span id="eye-wrapper"><i class="fa-solid fa-eye"></i><i class="fa-solid fa-eye-slash"></i></span>
+            </div>
             
     </div>
         
         <button type="submit" id="submit-btn">Register</button>
     </form>
-    <a th:href="@{/login}" id="login-btn">Login</a>
+    <hr id="horizontal-line">
+    <p id="register-text-wrapper">Already have an account? <a th:href="@{/login}" id="login-btn">Login</a></p>
     <div th:if="${error}" th:text="${error}" style="color:red;"></div>
+
+
+<script>
+    const eye = document.querySelector(".fa-eye");
+    const eyeSlash = document.querySelector(".fa-eye-slash");
+    const eye_wrapper = document.querySelector("#eye-wrapper");
+    const input_field = document.querySelector("#input-wrapper input");
+    eyeSlash.style.display="none";
+    eye_wrapper.addEventListener("mousedown",(e)=>{
+        eye.style.display = "none";
+        input_field.setAttribute("type","text");
+        eyeSlash.style.display = "block";
+
+    })
+    eye_wrapper.addEventListener("mouseup",(e)=>{
+        eyeSlash.style.display = "none";
+        input_field.setAttribute("type","password");
+        eye.style.display = "block";
+    })
+</script>
 </div>
 </body>
 </html>

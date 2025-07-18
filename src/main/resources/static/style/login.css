@@ -1,11 +1,14 @@
 :root{
     --main-bg-color: #4c987e;
     --secondary-color:#114b46;
+    --grey:#F6F6F6;
+    --dark-grey:#A2A2A2;
 }
 *{
     margin:0;
     padding: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 body{
     background-color: var(--main-bg-color);
@@ -17,20 +20,20 @@ body{
 }
 .container{
     padding: 1.2rem 0.5rem;
-    min-height: 250px;
+    min-height: 500px;
     min-width: 500px;
-    background-color: var(--secondary-color);
+    background-color: var(--main-bg-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    border-radius: 20px;
+    border-radius: 30px;
     gap: 1rem;
     color: #FFFFFF;
 }
 .container form{
-
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,35 +43,93 @@ body{
 }
 .container form .row-wrapper{
     width: 100%;
+    background-color: var(--grey);
+    padding: .5rem 1.8rem;
+    border-radius: 35px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: center;
 }
 .container form .row-wrapper input{
     float: right;
+    border: none;
+    width: 100%;
+    background-color: var(--grey);
+}
+.container form .row-wrapper label{
+    color: var(--dark-grey);
+    font-size: 1rem;
 }
 .container form input{
     min-height: 30px;
     font-size: 1.5rem;
+    color: var(--dark-grey);
+}
+.container form .row-wrapper input:focus{
+    outline: none;
 }
 .container #register-btn{
-    background-color: var(--main-bg-color);
     padding: 0.6rem 1rem;
     border-radius: 1rem;
     min-width: 60px;
+    color: var(--secondary-color);
     text-decoration: none;
+    font-weight: 900;
+}
+.container #register-btn:hover{
+    cursor: pointer;
 }
 .container #register-btn:visited{
     color: #FFFFFF;
     text-decoration: none;
 }
+.container form div{
+    width: 100%;
+}
 .container form #submit-btn{
-    background-color: var(--main-bg-color);
-    padding: 0.6rem 1rem;
-    border-radius: 1rem;
-    min-width: 60px;
+    background-color: var(--secondary-color);
+    padding: 1rem 1rem;
+    border-radius: 35px;
+    width: 100%;
+    font-size: 1.5rem;
+    transition: ease .5s;
     outline: none;
     border: none;
     color: #FFFFFF;
 }
 .container #horizontal-line{
     width: 85%;
-    border: 1px solid var(--main-bg-color);
+    border: 1px solid var(--secondary-color);
+}
+.container form #submit-btn:hover{
+    background-color: #145a54;
+    transition: ease .5s;
+    cursor: pointer;
+}
+#eye-wrapper{
+    position: absolute;
+    display: flex;
+    color: var(--dark-grey);
+    right: 0;
+    top:10%;
+    width: 24px;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-10%);
+    font-size: 1.2rem;
+}
+.container form .row-wrapper #input-wrapper{
+    position: relative;
+}
+
+
+#register-text-wrapper{
+    color: #FFFFFF;
+}
+#register-text-wrapper:hover{
+    cursor:default;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none;
 }
