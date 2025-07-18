@@ -64,8 +64,8 @@ export async function addExpense(e){
             return response.json();
         }).then(data => {
             console.log(data);
-            insertExpense(data)
-        }).catch(err => console.log(err.message)).finally(()=>{
+            insertExpense(data);
+        }).catch(err => alert(err.message)).finally(()=>{
             document.querySelector("#overlay").style.display="none";
             document.querySelector(".create-group-modal ul").innerHTML="";
             document.querySelector(".create-group-modal").style.display="none";
@@ -73,6 +73,7 @@ export async function addExpense(e){
             document.querySelector(".add-expense-modal .choices").innerHTML="";
             document.querySelector(".add-expense-modal .wrapper input").value="";
             document.querySelector(".add-expense-modal .wrapper #description").value="";
+            
             clearGroup();
             clearUser();
         });
