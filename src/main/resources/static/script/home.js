@@ -1,4 +1,4 @@
-import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup} from "./expenseModlue.js";
+import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup,expenseSplit, shrinkExpenseModal, collapseExpenseModal,clearSplitChoice} from "./expenseModlue.js";
 
 
 let arr;
@@ -11,7 +11,7 @@ const add_expense_btn = document.querySelector("#add-expense-btn")
 
 document.querySelector(".add-expense-modal .wrapper button").addEventListener("click",addExpense);
 
-createGroupBtn.addEventListener("click",openFriendsModal);
+createGroupBtn.addEventListener("click",openGroupCreationModal);
 add_expense_btn.addEventListener("click",openExpenseModal)
 add_friend_button.addEventListener("click",send_request)
 
@@ -49,7 +49,7 @@ function addUserToGroup(e){
     toggle(e.target.textContent)
     
 }
-async function openFriendsModal(e){
+async function openGroupCreationModal(e){
     const host = window.location.host;
     const token = localStorage.getItem("token");
     const response = await fetch("http://"+host+"/get-friends",{
@@ -64,6 +64,7 @@ async function openFriendsModal(e){
     }).then(response => response.text()).then(data => insertNames(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector("#overlay").style.display="block";
         document.querySelector(".create-group-modal").style.display="flex";
+        document.body.style.overflow="hidden";
     });
     
     
@@ -92,6 +93,9 @@ function closeModal(e){
     document.querySelector(".add-expense-modal .choices").innerHTML="";
     document.querySelector(".add-expense-modal .wrapper input").value="";
     document.querySelector(".add-expense-modal .wrapper #description").value="";
+    if(document.querySelector(".expenseSplits")!= null)document.querySelector(".expenseSplits").remove();
+    document.querySelector(".wrapper").style.height="100px";
+    document.body.style.overflow="auto";
     clearGroup();
     clearUser();
 }
@@ -152,6 +156,7 @@ async function openExpenseModal(e) {
         }
         
     }).then(response => response.text()).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
+        document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>Groups:</h3>")
         });
     const response2 = await fetch("http://"+host+"/group/getAll",{
         method:"GET",
@@ -162,7 +167,8 @@ async function openExpenseModal(e) {
         }
     }).then(response2 => response2.json()).then(data => insertGroups(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector("#overlay").style.display="block";
-        document.querySelector(".add-expense-modal").style.display="flex";    
+        document.querySelector(".add-expense-modal").style.display="flex";
+        document.body.style.overflow="hidden";
     });
     
 }
@@ -249,16 +255,24 @@ function selectUser(e){
     clearGroup();
     clearUser();
     if(activeElement===e.target.parentElement){
-        select(e);
-    }else{
-        select(e);
+        collapseExpenseModal();    
+    }else if(activeElement===null){
         addUserToExpense(e.target.textContent);
-
+        expenseSplit(document.querySelector(".add-expense-modal .wrapper"))
     }
+    else{
+        shrinkExpenseModal(3);
+        clearSplitChoice();
+        addUserToExpense(e.target.textContent);
+    }
+    select(e);
+    
+    
 
 }
 async function selectGroup(e){
-    
+    clearSplitChoice();
+    collapseExpenseModal();
     clearUser();
     if(activeElement===e.target.parentElement){
         clearGroup();

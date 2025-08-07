@@ -112,14 +112,15 @@ body{
     display: flex;
     color: var(--dark-grey);
     right: 0;
-    top:10%;
+    top:50%;
     width: 24px;
     justify-content: center;
     align-items: center;
-    transform: translateY(-10%);
+    transform: translateY(-50%);
     font-size: 1.2rem;
 }
 .container form .row-wrapper #input-wrapper{
+    
     position: relative;
 }
 

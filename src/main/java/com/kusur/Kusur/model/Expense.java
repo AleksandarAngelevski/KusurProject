@@ -17,6 +17,7 @@ public class Expense {
     private Group group;
     private String description;
     private Double amount;
+    private String splitChoice;
     @ManyToOne
     @JoinColumn(name ="creator")
     private User creator;
@@ -31,11 +32,14 @@ public class Expense {
         this.group = null;
         this.userReceiver = null;
         this.date = LocalDateTime.now();
-
+        this.splitChoice=null;
     }
     public Expense() {}
-    public void buildSingleExpense(User receiver) {
+    public void buildSingleExpense(User receiver,Integer choiceIndex) {
+        String[] choices ={"You paid, split equally.","You are owed the full amount.",receiver.getUsername()+" paid,split equally.",receiver.getUsername()+" is owed the full amount."};
         this.userReceiver = receiver;
+        this.splitChoice = choices[choiceIndex-1];
+
     }
     public void buildGroupExpense(Group group) {
         this.group = group;

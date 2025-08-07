@@ -32,7 +32,7 @@
         </div>
         <div class="groups-container">
             <h3>Groups:</h3>
-            <button id="create-group-btn"><span id="one"></span><span id="two"></span></button>
+            <button id="create-group-btn"><span id="plus-wrapper"><span id="one"></span><span id="two"></span></span> Create Group</button>
             <ul>
                 <li th:each="group : ${groups}"><a th:text="${group.name}" th:href="@{'~/groups/'+ ${group.id}}"></a></li>
             </ul>
@@ -40,8 +40,14 @@
     </div>
     <div class="middle">
         <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+        <div class="net-balances-container">
+            <ul>
+                <li th:each="balance : ${balances}" th:text="${balance}"></li>
+            </ul>
+        </div>
         <div class="expenses-container">
-            <div class="expense" th:each="expense : ${expenses}"><h1 th:text="${expense.description} + ' - Total: '+${expense.amount} + 'MKD'"></h1><ul>
+            <div class="expense" th:each="expense : ${expenses}">
+                <h1 th:text="${expense.description} + ' - Total: '+${expense.amount} + 'MKD'"></h1><ul>
                 <li th:text="'Created by:'+${expense.creator}"></li>
             </ul></div>
         </div>
@@ -67,6 +73,7 @@
             </div>
         </div>
         <div class="choices">
+            <h3>People:</h3>
             <!-- <div class="choice"><div class="person"></div></div>
             <div class="choice"><div class="person"></div></div>
             <div class="choice"><div class="person"></div></div>

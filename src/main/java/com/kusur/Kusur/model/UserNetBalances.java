@@ -30,4 +30,13 @@ public class UserNetBalances {
     public void decreaseDiff(Double sum){
         this.net_diff-=sum;
     }
+    public User getUser1() {
+        return this.user1;
+    }
+    public User getUser2() {
+        return this.user2;
+    }
+    public Double getNet_diff() {
+        return net_diff;
+    }
 }

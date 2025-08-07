@@ -22,11 +22,12 @@ public class ExpenseSplit {
     private Group group;
     private Double amount;
     private Boolean settled;
-    public ExpenseSplit(Expense expense, User user,Group group, Double amount) {
+    public ExpenseSplit(Expense expense, User user,Group group, Double amount,User owedTo) {
         this.expense = expense;
         this.user = user;
         this.amount = amount;
         this.group = group;
+        this.owedTo = owedTo;
         this.settled = false;
     }
     public ExpenseSplit() {}

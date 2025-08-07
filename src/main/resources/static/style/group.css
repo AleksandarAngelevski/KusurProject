@@ -1,6 +1,9 @@
 :root{
     --main-bg-color: #4c987e;
     --secondary-color:#114b46;
+    --accent-color:#f47c5c;
+    --neutral-color:#f4f1ed;
+    --muted-text-color:#5a6e68;
 }
 *{
     margin: 0;

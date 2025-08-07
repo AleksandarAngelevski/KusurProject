@@ -77,4 +77,7 @@ public class User {
     public String toString() {
         return this.username;
     }
+    public boolean equals(User o) {
+        return username.equals(o.getUsername());
+    }
 }
