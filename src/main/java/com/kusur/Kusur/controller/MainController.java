@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.kusur.Kusur.dto.UserDetailsDto;
 import com.kusur.Kusur.model.*;
-import com.kusur.Kusur.repository.FriendshipRepository;
-import com.kusur.Kusur.repository.GroupMembershipRepository;
-import com.kusur.Kusur.repository.GroupRepository;
-import com.kusur.Kusur.repository.UserRepository;
+import com.kusur.Kusur.repository.*;
 import com.kusur.Kusur.security.CustomUserDetails;
 import com.kusur.Kusur.service.GroupService;
+import com.kusur.Kusur.service.NetBalanceCalculatorService;
 import com.kusur.Kusur.service.SplitExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -40,6 +38,10 @@ public class MainController {
     @Autowired
     SplitExpenseService splitExpenseService;
     @Autowired
+    UserNetBalancesRepository userNetBalancesRepository;
+    @Autowired
+    NetBalanceCalculatorService netBalanceCalculatorService;
+    @Autowired
     MainController(GroupService groupService,GroupRepository groupRepository){
         this.groupService = groupService;
         this.groupRepository = groupRepository;
@@ -57,6 +59,10 @@ public class MainController {
         List<Expense> expenses = splitExpenseService.getExpenses(principal.getUser());
         System.out.println(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()));
         List<Group> groups = new ArrayList<>(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).collect(Collectors.toList()));
+
+        List<String> userNetBalances = netBalanceCalculatorService.getAllBalancesAsString(principal.getUser());
+        System.out.println(userNetBalances);
+        model.addAttribute("balances",userNetBalances);
         model.addAttribute("groups",groups);
         model.addAttribute("friends", f1);
         model.addAttribute("expenses",expenses);

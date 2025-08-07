@@ -40,7 +40,7 @@ public class ExpenseController {
         Expense temp= new Expense();
         System.out.println(expense);
 
-        if(expense.amount()==null || (expense.userId()==null && expense.groupId()==null)|| !expense.amount().toString().matches(regex_pattern)){
+        if(expense.amount()==null || (expense.userId()==null && expense.groupId()==null)|| !expense.amount().toString().matches(regex_pattern) || expense.userId()!=null && !(expense.splitChoice()>=1 && expense.splitChoice()<=4)){
             return ResponseEntity.badRequest().body(new ExpenseDto(null,null,"Client side error, refresh page",null));
         }
         System.out.println(expense.amount().toString().matches(regex_pattern));
