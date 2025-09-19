@@ -64,5 +64,7 @@ public class GroupController {
     public List<String> getGroupNetBalances(@AuthenticationPrincipal CustomUserDetails principal,@PathVariable Integer id){
         return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow());
 
+
+
     }
 }
