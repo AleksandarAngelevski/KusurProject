@@ -1,9 +1,9 @@
 package com.kusur.Kusur.service;
 
-import com.kusur.Kusur.model.ExpenseSplit;
-import com.kusur.Kusur.model.User;
-import com.kusur.Kusur.model.UserNetBalances;
+import com.kusur.Kusur.dto.GroupCreationDto;
+import com.kusur.Kusur.model.*;
 import com.kusur.Kusur.repository.ExpenseSplitRepository;
+import com.kusur.Kusur.repository.GroupNetBalancesRepository;
 import com.kusur.Kusur.repository.UserNetBalancesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,20 +17,28 @@ public class NetBalanceCalculatorService {
     @Autowired
     UserNetBalancesRepository userNetBalancesRepository;
     @Autowired
+    GroupNetBalancesRepository groupNetBalancesRepository;
+    @Autowired
     ExpenseSplitRepository expenseSplitRepository;
 
-    public  void calculate_net_balance(User user1,User user2){
+    public  void calculate_net_balance(User user1, User user2, Group group){
         User user1temp = (user1.getId()<user2.getId())?user1:user2;
         User user2temp = (user1.getId()>user2.getId())?user1:user2;
-        List<ExpenseSplit> expenseSplitsUser1=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettled(user1temp,user2temp,false);
-        List<ExpenseSplit> expenseSplitsUser2=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettled(user2temp,user1temp,false);
+        List<ExpenseSplit> expenseSplitsUser1;
+        List<ExpenseSplit> expenseSplitsUser2;
         Double net_balance1=0.0;
         Double net_balance2=0.0;
-        System.out.println(userNetBalancesRepository.getUserNetBalancesByUser1AndUser2(user1temp,user2temp));
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!______________________________________");
-        UserNetBalances userNetBalance = userNetBalancesRepository.getUserNetBalancesByUser1AndUser2(user1temp,user2temp).orElseGet(()-> createNetBalance(user1temp,user2temp));
-        System.out.println(expenseSplitsUser1);
-        System.out.println(expenseSplitsUser2);
+        NetBalances userNetBalance;
+        if(group!=null){
+             expenseSplitsUser1=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettledAndGroup(user1temp,user2temp,false,group);
+             expenseSplitsUser2=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettledAndGroup(user2temp,user1temp,false,group);
+            userNetBalance= groupNetBalancesRepository.getGroupNetBalancesByUser1AndUser2(user1temp,user2temp).orElseGet(()-> createGroupNetBalance(user1temp,user2temp,group));
+        }else{
+            expenseSplitsUser1=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettled(user1temp,user2temp,false);
+            expenseSplitsUser2=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettled(user2temp,user1temp,false);
+            userNetBalance= userNetBalancesRepository.getUserNetBalancesByUser1AndUser2(user1temp,user2temp).orElseGet(()-> createNetBalance(user1temp,user2temp));
+        }
+
         for(int i=0;i<expenseSplitsUser1.size();i++){
             net_balance1+=expenseSplitsUser1.get(i).getAmount();
             expenseSplitsUser1.get(i).settle();
@@ -46,7 +54,12 @@ public class NetBalanceCalculatorService {
         userNetBalance.increaseDiff(net_balance2);
         expenseSplitRepository.saveAll(expenseSplitsUser1);
         expenseSplitRepository.saveAll(expenseSplitsUser2);
-        userNetBalancesRepository.save(userNetBalance);
+        if(group!=null){
+            groupNetBalancesRepository.save((GroupNetBalances) userNetBalance);
+        }else{
+            userNetBalancesRepository.save((UserNetBalances) userNetBalance);
+        }
+
 
     }
     public void calculate_net_profits_by_user(){
@@ -55,6 +68,12 @@ public class NetBalanceCalculatorService {
 //    public List<Pair<User, ExpenseSplit>> construct_net_differences_graph_group(){
 //
 //    }
+    public  GroupNetBalances createGroupNetBalance(User user1,User user2,Group group) {
+        GroupNetBalances groupNetBalances = new GroupNetBalances((user1.getId() < user2.getId() ? user1 : user2), (user1.getId() > user2.getId() ? user1 : user2),group);
+        System.out.println("Created net balance row");
+        groupNetBalancesRepository.save(groupNetBalances);
+        return groupNetBalances;
+    }
     private UserNetBalances createNetBalance(User user1,User user2){
         UserNetBalances userNetBalances = new UserNetBalances((user1.getId()<user2.getId()?user1:user2),(user1.getId()>user2.getId()?user1:user2));
         System.out.println("Created net balance row");
@@ -66,10 +85,9 @@ public class NetBalanceCalculatorService {
         userNetBalances.addAll(userNetBalancesRepository.findByUser2(user));
         return userNetBalances;
     }
-    public List<String> getAllBalancesAsString(User user){
+    public List<String> getAllUserBalancesAsString(User user){
         List<UserNetBalances> userNetBalances = getAllBalances(user);
         List<String> userNetBalancesAsString = userNetBalances.stream().map((e)->{
-    
             if(!e.getUser1().equals(user)){
                 System.out.println("HERE");
                 if(e.getNet_diff()>0){
@@ -88,5 +106,30 @@ public class NetBalanceCalculatorService {
             return null;
         }).filter(e -> e!=null).collect(Collectors.toList());
         return userNetBalancesAsString;
+    }
+    public List<String> getAllGroupBalancesAsString(User user){
+        return new ArrayList<String>();
+    }
+    public List<String> getGroupBalancesAsString(User user, Group group){
+        List<GroupNetBalances> groupBalances = groupNetBalancesRepository.getGroupNetBalancesByUser1AndGroup(user,group);
+        groupBalances.addAll(groupNetBalancesRepository.getGroupNetBalancesByUser2AndGroup(user,group));
+        return  groupBalances.stream().map((balance)->{
+            if(balance.getUser1().equals(user)){
+                if(balance.getNet_diff()>0){
+                    return balance.getUser2()+" owes you "+balance.getNet_diff()+"MKD";
+                }else if(balance.getNet_diff()<0){
+                    return "You owe "+balance.getUser2()+" " +balance.getNet_diff()+"MKD";
+                }
+            }else{
+                if(balance.getUser1().equals(user)){
+                    if(balance.getNet_diff()>0){
+                        return "You owe "+balance.getUser2()+" " +balance.getNet_diff()+"MKD";
+                    }else if(balance.getNet_diff()<0){
+                        return balance.getUser2()+" owes you "+balance.getNet_diff()+"MKD";
+                    }
+                }
+            }
+            return null;
+        }).collect(Collectors.toList());
     }
 }

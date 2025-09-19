@@ -40,6 +40,11 @@ body{
 .container .middle{
     width: 40%;
 }
+
+
+.container .middle .expenses-container .expense h1{
+    word-wrap: break-word;
+}
 .create-group-modal{
     display: none;
     background-color: var(--main-color);
@@ -218,6 +223,7 @@ nav .add-friend{
     border-radius: 25px;
     overflow: hidden;
     transition: all .3s ease;
+    background-color: #FFFFFF;
 }
 .add-expense-modal .wrapper button{
     font-size: 1.3rem;
@@ -406,4 +412,20 @@ nav .add-friend{
 
 .split-choice.selected{
     background-color: var(--accent-color);
+}
+.groupExpensePayeeWrapper{
+    background-color: #FFFFFF;
+    padding: .2rem .6rem;
+    transition:height 1s ease;;
+}
+.groupExpensePayeeWrapper .payee{
+    display: block;
+    margin: 5px 10px;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: var(--muted-text-color);
+    color: var(--neutral-color);
+}
+.groupExpensePayeeWrapper .payee.active{
+    background-color: #f47c5c;
 }

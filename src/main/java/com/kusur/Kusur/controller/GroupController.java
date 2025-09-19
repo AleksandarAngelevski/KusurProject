@@ -3,14 +3,13 @@ package com.kusur.Kusur.controller;
 import com.kusur.Kusur.dto.GroupCreationDto;
 import com.kusur.Kusur.dto.GroupDto;
 import com.kusur.Kusur.dto.UserDetailsDto;
-import com.kusur.Kusur.model.Group;
-import com.kusur.Kusur.model.GroupMembership;
-import com.kusur.Kusur.model.User;
+import com.kusur.Kusur.model.*;
 import com.kusur.Kusur.repository.GroupMembershipRepository;
 import com.kusur.Kusur.repository.GroupRepository;
 import com.kusur.Kusur.repository.UserRepository;
 import com.kusur.Kusur.security.CustomUserDetails;
 import com.kusur.Kusur.service.GroupService;
+import com.kusur.Kusur.service.NetBalanceCalculatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +21,8 @@ import java.util.stream.Collectors;
 
 @RestController
 public class GroupController {
+    @Autowired
+    NetBalanceCalculatorService netBalancesService;
     @Autowired
     GroupService groupService;
     @Autowired
@@ -53,10 +54,15 @@ public class GroupController {
     
 
     @PostMapping("/group/create")
-        public ResponseEntity createGroup(@RequestBody GroupCreationDto groupCreationDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
-            groupService.createGroup(groupCreationDto,customUserDetails);
-            System.out.println(groupCreationDto.groupName());
-            System.out.println(groupCreationDto.users());
-            return  ResponseEntity.ok().body("Group created successfully");
-        }
+        public ResponseEntity createGroup(@RequestBody GroupCreationDto groupCreationDto, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        groupService.createGroup(groupCreationDto, customUserDetails);
+        System.out.println(groupCreationDto.groupName());
+        System.out.println(groupCreationDto.users());
+        return ResponseEntity.ok().body("Group created successfully");
+    }
+    @GetMapping("/group/balances/{id}")
+    public List<String> getGroupNetBalances(@AuthenticationPrincipal CustomUserDetails principal,@PathVariable Integer id){
+        return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow());
+
+    }
 }

@@ -42,12 +42,19 @@
         <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
         <div class="net-balances-container">
             <ul>
-                <li th:each="balance : ${balances}" th:text="${balance}"></li>
+                <li th:each="balance : ${userBalances}" th:text="${balance}"></li>
+            </ul>
+        </div>
+        <div class="group-net-balances-container">
+            <ul>
+                <li th:each="balance : ${groupBalances}" th:text="${balance}"></li>
             </ul>
         </div>
         <div class="expenses-container">
             <div class="expense" th:each="expense : ${expenses}">
-                <h1 th:text="${expense.description} + ' - Total: '+${expense.amount} + 'MKD'"></h1><ul>
+                <h1 th:text="${expense.description}"></h1>
+                <h2 th:text="'Total: ' +${expense.amount}+ 'MKD'"></h2>
+                <ul>
                 <li th:text="'Created by:'+${expense.creator}"></li>
             </ul></div>
         </div>
@@ -62,7 +69,7 @@
     
 </div>
 
-<div id="overlay"></div>
+    <div id="overlay"></div>
     <div class="add-expense-modal" style="display: none;">
         <div class="wrapper">
             <div class="row1">
@@ -73,7 +80,7 @@
             </div>
         </div>
         <div class="choices">
-            <h3>People:</h3>
+            <!-- <h3>People:</h3> -->
             <!-- <div class="choice"><div class="person"></div></div>
             <div class="choice"><div class="person"></div></div>
             <div class="choice"><div class="person"></div></div>
@@ -93,7 +100,7 @@
         <span class="close-friends-modal-btn close-modal-btn">Close</span>
     </div>
 
-
+    <span style="display:none;" sec:authentication="name" id="usernameeee">thymeleaf</span>
 <!-- <script  th:src="@{/script/expenseModlue.js}" type="module" src="../static/script/expenseModlue.js"></script> -->
 <script th:src="@{/script/home.js}" type="module" src="../static/script/home.js"></script>
 </body>

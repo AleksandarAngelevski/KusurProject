@@ -42,6 +42,8 @@ public class MainController {
     @Autowired
     NetBalanceCalculatorService netBalanceCalculatorService;
     @Autowired
+    ExpenseRepository expenseRepository;
+    @Autowired
     MainController(GroupService groupService,GroupRepository groupRepository){
         this.groupService = groupService;
         this.groupRepository = groupRepository;
@@ -56,13 +58,14 @@ public class MainController {
         List<User> f1 = new ArrayList<>(friendshipRepository.findFriendshipsBySender(principal.getUser()).stream().map(f -> f.getReceiver()).toList());
         List<User> f2 = friendshipRepository.findFriendshipsByReceiver(principal.getUser()).stream().map( f -> f.getSender()).toList();
         f1.addAll(f2);
-        List<Expense> expenses = splitExpenseService.getExpenses(principal.getUser());
+        List<Expense> expenses = splitExpenseService.getAllExpenses(principal.getUser());
         System.out.println(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()));
         List<Group> groups = new ArrayList<>(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).collect(Collectors.toList()));
 
-        List<String> userNetBalances = netBalanceCalculatorService.getAllBalancesAsString(principal.getUser());
+        List<String> userNetBalances = netBalanceCalculatorService.getAllUserBalancesAsString(principal.getUser());
+        List<String> groupNetBalances = netBalanceCalculatorService.getAllGroupBalancesAsString(principal.getUser());
         System.out.println(userNetBalances);
-        model.addAttribute("balances",userNetBalances);
+        model.addAttribute("userBalances",userNetBalances);
         model.addAttribute("groups",groups);
         model.addAttribute("friends", f1);
         model.addAttribute("expenses",expenses);
@@ -93,11 +96,15 @@ public class MainController {
     }
     @GetMapping("/groups/{id}")
     public String group(Model model ,@AuthenticationPrincipal CustomUserDetails principal, @PathVariable Integer id){
-
-        Group g = groupRepository.findGroupById(id).orElseThrow();
-        model.addAttribute("group",g);
+        Group groupObj = groupRepository.findGroupById(id).orElseThrow();
+        model.addAttribute("group",groupObj);
         List<UserDetailsDto> users = groupService.getGroupMembers(groupRepository.findGroupById(id).orElseThrow());
+        List<Expense> expenses = splitExpenseService.getGroupExpenses(principal.getUser(),groupObj);
+        System.out.println(expenses);
         model.addAttribute("users",users);
+        model.addAttribute("expenses",expenses);
+
         return "group";
     }
+
 }

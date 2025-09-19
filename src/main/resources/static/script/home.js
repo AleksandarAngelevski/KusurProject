@@ -1,4 +1,4 @@
-import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup,expenseSplit, shrinkExpenseModal, collapseExpenseModal,clearSplitChoice} from "./expenseModlue.js";
+import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup, shrinkExpenseModal, collapseExpenseSplitModal,clearSplitChoice, binaryExpenseSplit,groupExpenseSplit,createPayeeChoices} from "./expenseModlue.js";
 
 
 let arr;
@@ -155,7 +155,7 @@ async function openExpenseModal(e) {
 
         }
         
-    }).then(response => response.text()).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
+    }).then(response => response.text()).then(document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>People:</h3>")).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>Groups:</h3>")
         });
     const response2 = await fetch("http://"+host+"/group/getAll",{
@@ -254,16 +254,20 @@ function select(e){
 function selectUser(e){
     clearGroup();
     clearUser();
+    console.log("Active element ")
+    console.log(activeElement)
     if(activeElement===e.target.parentElement){
-        collapseExpenseModal();    
+        collapseExpenseSplitModal();    
     }else if(activeElement===null){
+        
         addUserToExpense(e.target.textContent);
-        expenseSplit(document.querySelector(".add-expense-modal .wrapper"))
+        binaryExpenseSplit(document.querySelector(".add-expense-modal .wrapper"))
     }
     else{
-        shrinkExpenseModal(3);
+        collapseExpenseSplitModal().then(()=>{binaryExpenseSplit(document.querySelector(".add-expense-modal .wrapper"))});
         clearSplitChoice();
         addUserToExpense(e.target.textContent);
+        
     }
     select(e);
     
@@ -272,13 +276,16 @@ function selectUser(e){
 }
 async function selectGroup(e){
     clearSplitChoice();
-    collapseExpenseModal();
+    
     clearUser();
+    
     if(activeElement===e.target.parentElement){
         clearGroup();
         select(e);
-        
+        collapseExpenseSplitModal();
     }else{
+        clearGroup();
+        console.log("SelectGroup");
         getGroupId(e);
         select(e);
         const host = window.location.host;
@@ -291,13 +298,12 @@ async function selectGroup(e){
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
         }
-    }).then(response => response.json()).then(data => insertMembers(data));
+    }).then(response => response.json()).then(data => {insertMembers(data);createPayeeChoices(data);collapseExpenseSplitModal().then(()=>groupExpenseSplit(e));});
     }
 }
 
 function insertMembers(members){
     startHeight = activeElement.offsetHeight;
-    console.log(members);
     let ul = document.createElement("ul");
     members.forEach((e)=>{
         let li = document.createElement("li");

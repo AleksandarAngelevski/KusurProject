@@ -4,6 +4,7 @@ import com.kusur.Kusur.dto.ExpenseCreationDto;
 import com.kusur.Kusur.dto.ExpenseDto;
 import com.kusur.Kusur.model.Expense;
 import com.kusur.Kusur.model.GroupMembership;
+import com.kusur.Kusur.repository.ExpenseRepository;
 import com.kusur.Kusur.repository.GroupMembershipRepository;
 import com.kusur.Kusur.repository.GroupRepository;
 import com.kusur.Kusur.security.CustomUserDetails;
@@ -15,16 +16,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
 @RestController
 public class ExpenseController {
     final String  regex_pattern="^[1-9]\\d*(\\.\\d+)?$";
-
+    @Autowired
+    ExpenseRepository expenseRepository;
     @Autowired
     SplitExpenseService splitExpenseService;
     @Autowired
@@ -40,15 +41,20 @@ public class ExpenseController {
         Expense temp= new Expense();
         System.out.println(expense);
 
-        if(expense.amount()==null || (expense.userId()==null && expense.groupId()==null)|| !expense.amount().toString().matches(regex_pattern) || expense.userId()!=null && !(expense.splitChoice()>=1 && expense.splitChoice()<=4)){
+        if(expense.amount()==null || (expense.userId()==null && expense.groupId()==null)||(expense.splitChoice()==null && expense.groupId()==null)|| !expense.amount().toString().matches(regex_pattern) || expense.userId()!=null && expense.splitChoice()!=null && !(expense.splitChoice()>=1 && expense.splitChoice()<=4)){
             return ResponseEntity.badRequest().body(new ExpenseDto(null,null,"Client side error, refresh page",null));
         }
         System.out.println(expense.amount().toString().matches(regex_pattern));
         try{
-        if(!addFriendService.friendshipExists(user.getUsername(),expense.userId())){
-            return ResponseEntity.badRequest().body(new ExpenseDto(null,null,"Client side error, friendship does not exist, refresh page",null));
-        }}
+            System.out.println("USER ID "+ expense.userId());
+            System.out.println(expense.userId()==null);
+        if(expense.userId() !=null){
+            if(!addFriendService.friendshipExists(user.getUsername(),expense.userId())) {
+                return ResponseEntity.badRequest().body(new ExpenseDto(null, null, "Client side error, friendship does not exist, refresh page", null));
+            }}
+        }
         catch (UsernameNotFoundException e){
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(new ExpenseDto(null,null,"Client side error, user not found, refresh page",null));
         }
         if(expense.groupId()==null){
@@ -66,12 +72,19 @@ public class ExpenseController {
         }
 
         if(expense.groupId()==null){
-            temp = splitExpenseService.createExpense(expense,user);
+            temp = splitExpenseService.createBinaryExpense(expense,user);
         }else{
-
+            temp = splitExpenseService.createGroupExpense(expense,user);
         }
 
         return ResponseEntity.ok(new ExpenseDto(temp.getCreator().getUsername(),(temp.getGroup().isPresent()? temp.getGroup().get().getId().toString():null),temp.getDescription(),temp.getAmount()));
+    }
+
+    @GetMapping("/expense/{id}")
+    public String expense(Model model, @PathVariable Integer id){
+        Expense expense = expenseRepository.findById(id);
+        model.addAttribute("expense",expense);
+        return "expense.html";
     }
 
 }

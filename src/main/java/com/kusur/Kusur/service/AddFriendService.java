@@ -43,8 +43,8 @@ public class AddFriendService {
         return userDetailsDtos;
     }
     public boolean friendshipExists(String user, String receiver){
-        User s = userRepository.findByUsername(user).orElseThrow(()-> new UsernameNotFoundException("User not found"));
-        User r = userRepository.findByUsername(receiver).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        User s = userRepository.findByUsername(user).orElseThrow(()-> new UsernameNotFoundException(user+" User not found"));
+        User r = userRepository.findByUsername(receiver).orElseThrow(()-> new UsernameNotFoundException(receiver+ " User not found"));
         return friendshipRepository.existsBySenderAndReceiver(s,r) || friendshipRepository.existsBySenderAndReceiver(r,s);
     }
 }
