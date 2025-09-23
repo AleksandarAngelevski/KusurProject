@@ -54,12 +54,13 @@ export async function addExpense(e){
     else{
         const host = window.location.host;
         const token = localStorage.getItem("token");
-        const response = await fetch("https://"+host+"/expense/add",{
+        const response = await fetch("http://"+host+"/expense/add",{
             method: "POST",
             credentials: "include",
             headers:{
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
+                "Access-Control-Allow-Origin":"*",
 
             },
             body: JSON.stringify(groupExpenseDto),
@@ -382,8 +383,6 @@ function selectPayee(e){
         }
     }
 }
-
-
 
 function expandElement(element){
     console.log("Expand element")

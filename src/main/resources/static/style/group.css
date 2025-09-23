@@ -178,15 +178,16 @@ nav #dashboardLink{
 }
 .settle-expense-modal{
     display: none;
-    width: 600px;
-    height: 400px;
-    background-color: red;
+    width: 500px;
+    min-height: 350px;
+    background-color: var(--main-color);
+    border-radius: 25px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     z-index: 1000;
-    padding: 1.5rem;
+    padding: 4% 1.5rem 1.5rem 1.5rem;
 }
 .settle-expense-modal #close-btn-modal{
     position: absolute;
@@ -196,4 +197,63 @@ nav #dashboardLink{
 }
 .settle-expense-modal #close-btn-modal:hover{
     cursor: pointer;
+}
+.settle-expense-modal-wrapper{
+    display: block;
+}
+.add-expense-modal{
+    background-color: var(--main-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    min-height: 300px;
+    z-index: 1000;
+    padding: 1.5rem 1rem;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: space-between;
+}
+.add-expense-modal .wrapper{
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all .3s ease;
+    background-color: #FFFFFF;
+}
+.add-expense-modal .wrapper button{
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: .8rem;
+    border: none;
+    background-color: var(--secondary-color);
+    color: #FFFFFF;
+    height: 50px;
+}
+.add-expense-modal .wrapper input{
+    outline: none;
+    height: 50px;
+    border: none;
+    font-size: 1.5rem;
+    width: 50%;
+    padding: 5px 30px;
+    
+
+}
+.add-expense-modal .wrapper #description{
+    padding: 5px 30px;
+    
+}
+.add-expense-modal .wrapper .row1,.add-expense-modal .wrapper .row2{
+    display: flex;
+}
+.add-expense-modal .wrapper .row1 button:hover{
+    cursor: pointer;
+}
+.add-expense-modal .payee-modal{
+    display: none;
+}
+
+.activeExpenseMember{
+    background-color: var(--accent-color);
 }

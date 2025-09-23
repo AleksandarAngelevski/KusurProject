@@ -72,11 +72,36 @@
     </div>
     <div class="settle-expense-modal">
         <span id="close-btn-modal">Close</span>
-        <span username="test" amont="50">You are owed 50$</span>
+        <div class="settle-expense-modal-wrapper">
+            
+        </div>
+        
     </div>
-    
+    <div class="add-expense-modal" style="display: none;">
+        <div class="wrapper">
+            <div class="row1">
+                <input type="text" name="" id="sum" placeholder="Sum..." style="width: 50%;"><button style="width: 50%;">Add expense</button>
+            </div>
+            <div class="row2">
+                <input type="text" name="" id="description" placeholder="Description..." style="width: 100%;">
+            </div>
+        </div>
+        <div class="payee">Paid by : </div>
+        <div class="payee-modal">
+            <div class="user">user1</div>
+            <div class="user">user2</div>
+            <div class="user">user3</div>
+            <div class="user">user4</div>
+        </div>
+        <div class="groupMembers">
+            <div class="user">user1</div>
+            <div class="user">user2</div>
+            <div class="user">user3</div>
+            <div class="user">user4</div>
+        </div>
+    </div>
     <span style="display:none;" sec:authentication="name" id="usernameeee">thymeleaf</span>
     <span style="display:none;" th:text="${group.id}" id="groupId">thymeleaf</span>
-<!-- <script  th:src="@{/script/expenseModlue.js}" type="module" src="../static/script/expenseModlue.js"></script> -->
+<script  th:src="@{/script/expenseModlue.js}" type="module" src="../static/script/expenseModlue.js"></script>
 <script th:src="@{/script/group.js}" type="module" src="../static/script/group.js"></script>
 </body>

@@ -70,7 +70,7 @@ public class NetBalanceCalculatorService {
 //    }
     public  GroupNetBalances createGroupNetBalance(User user1,User user2,Group group) {
         GroupNetBalances groupNetBalances = new GroupNetBalances((user1.getId() < user2.getId() ? user1 : user2), (user1.getId() > user2.getId() ? user1 : user2),group);
-        System.out.println("Created net balance row");
+        System.out.println("Created group net balance row");
         groupNetBalancesRepository.save(groupNetBalances);
         return groupNetBalances;
     }
@@ -130,6 +130,6 @@ public class NetBalanceCalculatorService {
                 }
             }
             return null;
-        }).collect(Collectors.toList());
+        }).filter((e) -> e !=null).collect(Collectors.toList());
     }
 }

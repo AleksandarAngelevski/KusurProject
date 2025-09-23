@@ -21,12 +21,13 @@ async function send_request(){
     }
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/add-friend",{
+    const response = await fetch("http://"+host+"/add-friend",{
         method: "POST",
         credentials: "include",
         headers:{
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
+            "Access-Control-Allow-Origin":"*",
         },
         body: JSON.stringify({username:add_friend_input_field.value.trim()}),
     }).then(response => response.text()).then(data => alert(data)).finally();
@@ -52,12 +53,13 @@ function addUserToGroup(e){
 async function openGroupCreationModal(e){
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/get-friends",{
+    const response = await fetch("http://"+host+"/get-friends",{
         method: "GET",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
 
         }
         
@@ -121,12 +123,13 @@ async function makeRequest(e){
     const host = window.location.host;
     
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/group/create",{
+    const response = await fetch("http://"+host+"/group/create",{
         method: "POST",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
 
         },
         body:JSON.stringify({
@@ -146,24 +149,26 @@ async function openExpenseModal(e) {
 
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/get-friends",{
+    const response = await fetch("http://"+host+"/get-friends",{
         method: "GET",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
 
         }
         
     }).then(response => response.text()).then(document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>People:</h3>")).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>Groups:</h3>")
         });
-    const response2 = await fetch("https://"+host+"/group/getAll",{
+    const response2 = await fetch("http://"+host+"/group/getAll",{
         method:"GET",
         credentials:"include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
         }
     }).then(response2 => response2.json()).then(data => insertGroups(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector("#overlay").style.display="block";
@@ -291,12 +296,13 @@ async function selectGroup(e){
         const host = window.location.host;
         const token = localStorage.getItem("token");
         const id = e.target.getAttribute("id");
-        const response = await fetch("https://"+host+"/group/"+id+"/members",{
+        const response = await fetch("http://"+host+"/group/"+id+"/members",{
         method: "GET",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
         }
     }).then(response => response.json()).then(data => {insertMembers(data);createPayeeChoices(data);collapseExpenseSplitModal().then(()=>groupExpenseSplit(e));});
     }

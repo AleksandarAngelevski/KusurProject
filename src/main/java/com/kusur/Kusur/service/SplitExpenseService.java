@@ -102,7 +102,12 @@ public class SplitExpenseService {
 
         expenseSplitRepository.saveAll(expenseSplits);
         for(int i=0;i<users.size();i++){
-            netBalanceCalculatorService.calculate_net_balance(expense.getPayee(),users.get(i),expense.getGroup().get());
+            if(users.get(i).equals(expense.getPayee())){
+
+            }else{
+                netBalanceCalculatorService.calculate_net_balance(expense.getPayee(),users.get(i),expense.getGroup().get());
+            }
+
         }
 
     }

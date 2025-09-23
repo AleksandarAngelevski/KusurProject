@@ -100,9 +100,11 @@ public class MainController {
         model.addAttribute("group",groupObj);
         List<UserDetailsDto> users = groupService.getGroupMembers(groupRepository.findGroupById(id).orElseThrow());
         List<Expense> expenses = splitExpenseService.getGroupExpenses(principal.getUser(),groupObj);
-        System.out.println(expenses);
+        List<String> groupNetBalances =netBalanceCalculatorService.getGroupBalancesAsString(principal.getUser(),groupObj);
+        System.out.println(groupNetBalances);
         model.addAttribute("users",users);
         model.addAttribute("expenses",expenses);
+        model.addAttribute("groupBalances",groupNetBalances);
 
         return "group";
     }
