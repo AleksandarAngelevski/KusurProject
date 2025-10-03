@@ -32,6 +32,9 @@ export function clearGroup(){
     groupExpenseDto.groupId=null;
     groupExpenseDto.users=[];
     groupExpenseDto.payee=null;
+    groupExpenseDto.description = null;
+    groupExpenseDto.amount=0.0;
+    groupExpenseDto.splitChoice=null;
 }
 export function clearUser(){
     groupExpenseDto.userId=null;

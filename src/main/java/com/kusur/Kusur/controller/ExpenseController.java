@@ -48,7 +48,7 @@ public class ExpenseController {
         try{
             System.out.println("USER ID "+ expense.userId());
             System.out.println(expense.userId()==null);
-        if(expense.userId() !=null){
+        if(expense.userId() !=null && !expense.userId().equals(user.getUsername())){
             if(!addFriendService.friendshipExists(user.getUsername(),expense.userId())) {
                 return ResponseEntity.badRequest().body(new ExpenseDto(null, null, "Client side error, friendship does not exist, refresh page", null));
             }}

@@ -118,7 +118,7 @@ public class NetBalanceCalculatorService {
                 if(balance.getNet_diff()>0){
                     return balance.getUser2()+" owes you "+balance.getNet_diff()+"MKD";
                 }else if(balance.getNet_diff()<0){
-                    return "You owe "+balance.getUser2()+" " +balance.getNet_diff()+"MKD";
+                    return "You owe "+balance.getUser2()+" " + Math.abs(balance.getNet_diff())+"MKD";
                 }
             }else{
                 if(balance.getUser1().equals(user)){
