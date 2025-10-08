@@ -275,3 +275,41 @@ nav #dashboardLink{
 .payeeUserActive{
     background-color: var(--accent-color);
 }
+
+.loading-spinner-wrapper{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.loading-spinner{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border: 8px solid var(--main-color);
+    border-radius: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+    animation: rotateSpinner .9s linear infinite;
+    border-bottom-color: transparent;
+    
+}
+.loading-spinner-child{
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    border: 5px solid var(--accent-color);
+    border-top-color: transparent;
+    left: 50%;
+    top:50%;
+    position: absolute;
+    animation: rotateSpinner 3s linear infinite;
+    animation-direction: reverse;
+}
+

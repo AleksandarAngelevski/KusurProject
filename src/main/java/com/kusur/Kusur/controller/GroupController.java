@@ -1,5 +1,6 @@
 package com.kusur.Kusur.controller;
 
+import com.kusur.Kusur.dto.BalanceDto;
 import com.kusur.Kusur.dto.GroupCreationDto;
 import com.kusur.Kusur.dto.GroupDto;
 import com.kusur.Kusur.dto.UserDetailsDto;
@@ -61,11 +62,11 @@ public class GroupController {
         return ResponseEntity.ok().body("Group created successfully");
     }
     @GetMapping("/group/balances/{id}")
-    public List<String> getGroupNetBalances(@AuthenticationPrincipal CustomUserDetails principal,@PathVariable Integer id){
-        return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow());
-
-
-
-
+    public List<BalanceDto> getGroupNetBalances(@AuthenticationPrincipal CustomUserDetails principal, @PathVariable Integer id){
+        return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow(),false);
+    }
+    @GetMapping("/group/balances/user/{id}")
+    public List<BalanceDto> getGroupNetBalancesUser(@AuthenticationPrincipal CustomUserDetails principal, @PathVariable Integer id){
+        return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow(),true);
     }
 }

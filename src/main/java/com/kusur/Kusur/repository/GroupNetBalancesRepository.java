@@ -13,8 +13,11 @@ public interface GroupNetBalancesRepository extends JpaRepository<GroupNetBalanc
     Optional<GroupNetBalances> getGroupNetBalancesByUser1AndUser2(User user1,User user2);
     List<GroupNetBalances> getGroupNetBalancesByUser1AndGroup(User user, Group group);
     List<GroupNetBalances> getGroupNetBalancesByUser2AndGroup(User user, Group group);
+    Optional<GroupNetBalances> getGroupNetBalancesByUser1AndUser2AndGroup(User user1,User user2,Group group);
+    List<GroupNetBalances> getGroupNetBalancesByGroup(Group group);
     List<UserNetBalances> findByUser1(User user);
     List<UserNetBalances> findByUser2(User user);
+
 
 }
 

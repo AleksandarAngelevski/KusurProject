@@ -74,6 +74,7 @@ public class ExpenseController {
         if(expense.groupId()==null){
             temp = splitExpenseService.createBinaryExpense(expense,user);
         }else{
+            System.out.println(")))))))))))))))))))))))))))))))))))))))");
             temp = splitExpenseService.createGroupExpense(expense,user);
         }
 

@@ -28,6 +28,7 @@ public class Expense {
     @JoinColumn(name = "payee_id")
     private User payee;
     private LocalDateTime date;
+    private Boolean settled;
 
     public User getPayee() {
         return payee;
@@ -47,6 +48,7 @@ public class Expense {
         this.userReceiver = null;
         this.date = LocalDateTime.now();
         this.splitChoice=null;
+        this.settled=false;
     }
     public Expense() {}
     public void buildSingleExpense(User receiver,Integer choiceIndex) {

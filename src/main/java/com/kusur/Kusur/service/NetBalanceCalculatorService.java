@@ -1,6 +1,10 @@
 package com.kusur.Kusur.service;
 
+import com.kusur.Kusur.dto.BalanceDto;
 import com.kusur.Kusur.dto.GroupCreationDto;
+import com.kusur.Kusur.dto.UserDetailsDto;
+import com.kusur.Kusur.mapper.NetBalanceToDto;
+import com.kusur.Kusur.mapper.UserToUserDetailsDto;
 import com.kusur.Kusur.model.*;
 import com.kusur.Kusur.repository.ExpenseSplitRepository;
 import com.kusur.Kusur.repository.GroupNetBalancesRepository;
@@ -21,6 +25,10 @@ public class NetBalanceCalculatorService {
     @Autowired
     ExpenseSplitRepository expenseSplitRepository;
 
+    @Autowired
+    UserToUserDetailsDto userToUserDetailsDto;
+    @Autowired
+    NetBalanceToDto netBalanceToDto;
     public  void calculate_net_balance(User user1, User user2, Group group){
         User user1temp = (user1.getId()<user2.getId())?user1:user2;
         User user2temp = (user1.getId()>user2.getId())?user1:user2;
@@ -30,9 +38,11 @@ public class NetBalanceCalculatorService {
         Double net_balance2=0.0;
         NetBalances userNetBalance;
         if(group!=null){
+            System.out.println("Group net ");
              expenseSplitsUser1=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettledAndGroup(user1temp,user2temp,false,group);
              expenseSplitsUser2=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettledAndGroup(user2temp,user1temp,false,group);
-            userNetBalance= groupNetBalancesRepository.getGroupNetBalancesByUser1AndUser2(user1temp,user2temp).orElseGet(()-> createGroupNetBalance(user1temp,user2temp,group));
+            userNetBalance= groupNetBalancesRepository.getGroupNetBalancesByUser1AndUser2AndGroup(user1temp,user2temp,group
+            ).orElseGet(()-> createGroupNetBalance(user1temp,user2temp,group));
         }else{
             expenseSplitsUser1=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettled(user1temp,user2temp,false);
             expenseSplitsUser2=expenseSplitRepository.getExpenseSplitByUserAndOwedToAndSettled(user2temp,user1temp,false);
@@ -110,23 +120,30 @@ public class NetBalanceCalculatorService {
     public List<String> getAllGroupBalancesAsString(User user){
         return new ArrayList<String>();
     }
-    public List<String> getGroupBalancesAsString(User user, Group group){
-        List<GroupNetBalances> groupBalances = groupNetBalancesRepository.getGroupNetBalancesByUser1AndGroup(user,group);
-        groupBalances.addAll(groupNetBalancesRepository.getGroupNetBalancesByUser2AndGroup(user,group));
+    public List<BalanceDto>     getGroupBalancesAsString(User user, Group group,Boolean onlyUserInvolved){
+        List<GroupNetBalances> groupBalances = groupNetBalancesRepository.getGroupNetBalancesByGroup(group);
+        System.out.println(group + " Group");
+        System.out.println(groupBalances+ " GroupBalances");
         return  groupBalances.stream().map((balance)->{
             if(balance.getUser1().equals(user)){
                 if(balance.getNet_diff()>0){
-                    return balance.getUser2()+" owes you "+balance.getNet_diff()+"MKD";
+                    return netBalanceToDto.balanceDto(userToUserDetailsDto.outUser(balance.getUser2()),userToUserDetailsDto.outUser(balance.getUser1()),balance.getUser2()+" owes you "+balance.getNet_diff()+"MKD",Math.abs(balance.getNet_diff()));
                 }else if(balance.getNet_diff()<0){
-                    return "You owe "+balance.getUser2()+" " + Math.abs(balance.getNet_diff())+"MKD";
+                    return netBalanceToDto.balanceDto(userToUserDetailsDto.outUser(balance.getUser1()),userToUserDetailsDto.outUser(balance.getUser2()),"You owe "+balance.getUser2()+" " +Math.abs(balance.getNet_diff())+"MKD",Math.abs(balance.getNet_diff()));
                 }
-            }else{
-                if(balance.getUser1().equals(user)){
+            }else if(balance.getUser2().equals(user)){
                     if(balance.getNet_diff()>0){
-                        return "You owe "+balance.getUser2()+" " +balance.getNet_diff()+"MKD";
+                        return netBalanceToDto.balanceDto(userToUserDetailsDto.outUser(balance.getUser2()),userToUserDetailsDto.outUser(balance.getUser1()),"You owe "+balance.getUser1()+" " +balance.getNet_diff()+"MKD",Math.abs(balance.getNet_diff()));
                     }else if(balance.getNet_diff()<0){
-                        return balance.getUser2()+" owes you "+balance.getNet_diff()+"MKD";
+                        return netBalanceToDto.balanceDto(userToUserDetailsDto.outUser(balance.getUser1()),userToUserDetailsDto.outUser(balance.getUser2()),balance.getUser1()+" owes you "+Math.abs(balance.getNet_diff())+"MKD",Math.abs(balance.getNet_diff()));
+
                     }
+
+            }else if(!onlyUserInvolved){
+                if(balance.getNet_diff()>0){
+                    return netBalanceToDto.balanceDto(userToUserDetailsDto.outUser(balance.getUser2()),userToUserDetailsDto.outUser(balance.getUser1()),balance.getUser2()+" owes "+balance.getUser1()+" " +balance.getNet_diff()+"MKD",Math.abs(balance.getNet_diff()));
+                }else if(balance.getNet_diff()<0){
+                    return netBalanceToDto.balanceDto(userToUserDetailsDto.outUser(balance.getUser1()),userToUserDetailsDto.outUser(balance.getUser1()),balance.getUser1()+" owes "+balance.getUser2()+" "+Math.abs(balance.getNet_diff())+"MKD",Math.abs(balance.getNet_diff()));
                 }
             }
             return null;

@@ -1,4 +1,4 @@
-import{fillModal} from "./settleExpenseModule.js"
+import * as SettleExpense from "./settleExpenseModule.js";
 
 let settleExpenseButton = document.querySelector("#settle-expense-btn");
 let settleExpenseModal  = document.querySelector(".settle-expense-modal");
@@ -19,7 +19,7 @@ addExpenseButton.addEventListener("click",openExpenseModal);
 function openSettleExpenseModal(e){
     document.querySelector("#overlay").style.display = "block";
     settleExpenseModal.style.display = "block";
-    fillModal(document.querySelector("#groupId").textContent,document.querySelector(".settle-expense-modal"))
+    SettleExpense.fillModal(document.querySelector("#groupId").textContent,document.querySelector(".settle-expense-modal .settle-expense-modal-wrapper"))
 }
 function updateCurrentPayee(){
     document.querySelector(".settle-expense-modal-wrapper .add-expense-modal .payee span").remove();
@@ -167,6 +167,8 @@ async function addGroupExpense(e){
     groupExpenseDto.amount=Number(document.querySelector("#sum").value);
     groupExpenseDto.payee=currentPayee.textContent;
     groupExpenseDto.users=Array.from(expenseMembersSet);
+    console.log("Current payee: "+groupExpenseDto.payee);
+    console.log(groupExpenseDto.users);
     groupExpenseDto.userId=document.querySelector("#usernameeee").textContent;
     document.querySelector("#overlay").style.display="block";
     console.log("Submitting expense");

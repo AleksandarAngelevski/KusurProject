@@ -2,6 +2,7 @@ package com.kusur.Kusur.controller;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.kusur.Kusur.dto.BalanceDto;
 import com.kusur.Kusur.dto.UserDetailsDto;
 import com.kusur.Kusur.model.*;
 import com.kusur.Kusur.repository.*;
@@ -100,8 +101,8 @@ public class MainController {
         model.addAttribute("group",groupObj);
         List<UserDetailsDto> users = groupService.getGroupMembers(groupRepository.findGroupById(id).orElseThrow());
         List<Expense> expenses = splitExpenseService.getGroupExpenses(principal.getUser(),groupObj);
-        List<String> groupNetBalances =netBalanceCalculatorService.getGroupBalancesAsString(principal.getUser(),groupObj);
-        System.out.println(groupNetBalances );
+        List<BalanceDto> groupNetBalances =netBalanceCalculatorService.getGroupBalancesAsString(principal.getUser(),groupObj,false);
+        System.out.println(groupNetBalances +"\n GroupNetBalances");
         model.addAttribute("users",users);
         model.addAttribute("expenses",expenses);
         model.addAttribute("groupBalances",groupNetBalances);

@@ -86,7 +86,7 @@ public class SplitExpenseService {
         System.out.println("PART AMOUNT: "+part);
         for(int i=0;i<users.size();i++) {
             if (users.get(i).equals(expense.getPayee())) {
-                System.out.println("Expense creator included in expense split");
+                System.out.println("Expense payee included in expense split");
                 sum = sum - part;
             } else {
                 System.out.println("SUM PRE:=> " + sum);
@@ -105,7 +105,7 @@ public class SplitExpenseService {
             if(users.get(i).equals(expense.getPayee())){
 
             }else{
-                netBalanceCalculatorService.calculate_net_balance(expense.getPayee(),users.get(i),expense.getGroup().get());
+                netBalanceCalculatorService.calculate_net_balance(expense.getPayee(),users.get(i),expense.getGroup().orElseThrow());
             }
 
         }

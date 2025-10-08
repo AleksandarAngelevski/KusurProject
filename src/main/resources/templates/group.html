@@ -4,6 +4,7 @@
 <head>
     <title th:text="${group.name}"></title>
     <link rel="stylesheet" type="text/css" th:href="@{/style/group.css}" href="../static/style/group.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{/style/loadingSpinner.css}" href="../static/style/loadingSpinner.css" >
 </head>
 <body>
 
@@ -29,7 +30,7 @@
         </div>
         <div class="group-net-balances-container">
             <ul>
-                <li th:each="balance : ${groupBalances}" th:text="${balance}"></li>
+                <li th:each="balance : ${groupBalances}" th:text="${balance.message}" th:data-debtor="${balance.debtor.username}" th:data-debtee="${balance.debtee.username}"></li>
             </ul>
         </div>
         <div class="expenses-container">
@@ -87,5 +88,6 @@
     <span style="display:none;" th:text="${group.id}" id="groupId">thymeleaf</span>
 <script  th:src="@{/script/expenseModlue.js}" type="module" src="../static/script/expenseModlue.js"></script>
 <script  th:src="@{/script/settleExpenseModule.js}" type="module" src="../static/script/settleExpenseModule.js"></script>
+<script  th:src="@{/script/loadingSpinnerModule.js}" type="module" src="../static/script/loadingSpinnerModule.js"></script>
 <script th:src="@{/script/group.js}" type="module" src="../static/script/group.js"></script>
 </body>
