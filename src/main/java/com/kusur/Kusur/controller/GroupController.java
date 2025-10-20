@@ -63,10 +63,10 @@ public class GroupController {
     }
     @GetMapping("/group/balances/{id}")
     public List<BalanceDto> getGroupNetBalances(@AuthenticationPrincipal CustomUserDetails principal, @PathVariable Integer id){
-        return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow(),false);
+        return netBalancesService.getGroupBalances(principal.getUser(),groupRepository.findGroupById(id).orElseThrow(),false);
     }
     @GetMapping("/group/balances/user/{id}")
     public List<BalanceDto> getGroupNetBalancesUser(@AuthenticationPrincipal CustomUserDetails principal, @PathVariable Integer id){
-        return netBalancesService.getGroupBalancesAsString(principal.getUser(),groupRepository.findGroupById(id).orElseThrow(),true);
+        return netBalancesService.getGroupBalances(principal.getUser(),groupRepository.findGroupById(id).orElseThrow(),true);
     }
 }

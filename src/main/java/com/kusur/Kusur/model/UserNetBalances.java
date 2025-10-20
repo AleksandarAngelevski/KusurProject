@@ -15,20 +15,20 @@ public class UserNetBalances implements NetBalances{
     @ManyToOne
     @JoinColumn(name ="user2")
     private User user2;
-    private Double net_diff;
+    private Double netDiff;
     public UserNetBalances() {
 
     }
     public UserNetBalances(User user1, User user2) {
         this.user1 = user1;
         this.user2 = user2;
-        this.net_diff = 0.00;
+        this.netDiff = 0.00;
     }
     public void increaseDiff(Double sum){
-        this.net_diff+=sum;
+        this.netDiff+=sum;
     }
     public void decreaseDiff(Double sum){
-        this.net_diff-=sum;
+        this.netDiff-=sum;
     }
     public User getUser1() {
         return this.user1;
@@ -37,6 +37,6 @@ public class UserNetBalances implements NetBalances{
         return this.user2;
     }
     public Double getNet_diff() {
-        return net_diff;
+        return netDiff;
     }
 }

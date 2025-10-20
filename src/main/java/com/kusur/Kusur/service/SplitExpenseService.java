@@ -32,7 +32,14 @@ public class SplitExpenseService {
     public void SplitExpense(){}
     public Expense createBinaryExpense(ExpenseCreationDto expense, @AuthenticationPrincipal CustomUserDetails user){
         Expense expense1 = new Expense(expense.description(),expense.amount(),user.getUser(),userRepository.findByUsername(expense.payee()).orElseThrow());
-        expense1.buildSingleExpense(userRepository.findByUsername(expense.userId()).orElseThrow(),expense.splitChoice());
+
+        if(expense.payee().equals(expense.userId())){
+            expense1.buildSingleExpense(user.getUser(),expense.splitChoice());
+        }else{
+            expense1.buildSingleExpense(userRepository.findByUsername(expense.userId()).orElseThrow(),expense.splitChoice());
+        }
+        System.out.println("EXPENSE___-");
+        System.out.println(expense1);
         expenseRepository.save(expense1);
         createBinaryExpenseSplit(expense1,user,expense.splitChoice());
         return expense1;
@@ -60,23 +67,23 @@ public class SplitExpenseService {
             split1 = Math.ceil(sum/2);
             split2 = sum - split1;
             if(choice==1){
-                expenseSplit1 = new ExpenseSplit(expense,expense.getUserReceiver(),null,split1,user.getUser());
+                expenseSplit1 = new ExpenseSplit(expense,expense.getUserReceiver(),null,split1,expense.getPayee());
             }
             else{
-                expenseSplit1 = new ExpenseSplit(expense,user.getUser(),null,split1,expense.getUserReceiver());
+                expenseSplit1 = new ExpenseSplit(expense,expense.getUserReceiver(),null,split1,expense.getPayee());
             }
         }
         else{
             split1 = sum;
                 if(choice==2){
-                    expenseSplit1 = new ExpenseSplit(expense,expense.getUserReceiver(),null,split1,user.getUser());
+                    expenseSplit1 = new ExpenseSplit(expense,expense.getUserReceiver(),null,split1,expense.getPayee());
                 }else{
-                    expenseSplit1 = new ExpenseSplit(expense,user.getUser(),null,split1,expense.getUserReceiver());
+                    expenseSplit1 = new ExpenseSplit(expense,expense.getUserReceiver(),null,split1,expense.getPayee());
                 }
         }
 
         expenseSplitRepository.save(expenseSplit1);
-        netBalanceCalculatorService.calculate_net_balance(expense.getUserReceiver(),user.getUser(),null);
+        netBalanceCalculatorService.calculate_net_balance(expense.getUserReceiver(),expense.getPayee(),null);
     }
     private void createGroupExpenseSplit(@NotNull Expense expense, @AuthenticationPrincipal CustomUserDetails user, @NotNull List<User> users){
         List<ExpenseSplit> expenseSplits = new LinkedList<>();
@@ -112,16 +119,25 @@ public class SplitExpenseService {
 
     }
     public List<Expense> getGroupExpenses(User user, Group group){
-        List<Expense> expenses = expenseRepository.findByGroup(group);
+        List<Expense> expenses = expenseRepository.findExpenseByGroupAndSettled(group,false);
         expenses.sort(Comparator.comparing(Expense::creationDate).reversed());
         return expenses;
-    }       
+    }
+    public List<Expense> getSettledGroupExpenses(User user,Group group){
+        List<Expense> expenses = expenseRepository.findExpenseByGroupAndSettled(group,true);
+        expenses.sort(Comparator.comparing(Expense::creationDate).reversed());
+        return expenses;
+    }
     public List<Expense> getAllExpenses(User user){
-        List<Expense> expenses = expenseRepository.findByCreator(user);
-        expenses.addAll(expenseRepository.findByUserReceiver(user));
-        expenses.addAll(groupExpenseRepository.getGroupExpenseByUser(user).stream().map(ge ->{
-            return  ge.getExpense();
-        }).toList());
+        List<Expense> expenses = expenseRepository.findByPayeeAndGroupIsNullAndSettled(user,false);
+        System.out.println("BLAA");
+        System.out.println(expenses);
+        expenses.addAll(expenseRepository.findExpenseByUserReceiverAndGroupIsNullAndSettled(user,false));
+
+        System.out.println("BLAA2");
+        expenses.forEach(expense -> {
+            System.out.println(expense.isSettled());
+        });
         expenses.sort(Comparator.comparing(Expense::creationDate).reversed());
         return expenses;
     }

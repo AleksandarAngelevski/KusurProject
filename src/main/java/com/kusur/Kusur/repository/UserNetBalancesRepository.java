@@ -11,5 +11,6 @@ public interface UserNetBalancesRepository extends JpaRepository<UserNetBalances
     Optional<UserNetBalances> getUserNetBalancesByUser1AndUser2(User user1, User user2);
     List<UserNetBalances> findByUser1(User user);
     List<UserNetBalances> findByUser2(User user);
-
+    List<UserNetBalances> findUserNetBalancesByUser1AndNetDiffIsNot(User user,Double net_diff);
+    List<UserNetBalances> findUserNetBalancesByUser2AndNetDiffIsNot(User user,Double net_diff);
 }

@@ -52,7 +52,7 @@ public class Expense {
     }
     public Expense() {}
     public void buildSingleExpense(User receiver,Integer choiceIndex) {
-        String[] choices ={"You paid, split equally.","You are owed the full amount.",receiver.getUsername()+" paid,split equally.",receiver.getUsername()+" is owed the full amount."};
+        String[] choices ={"You paid, split equally.","You are owed the full amount.",payee.getUsername()+" paid,split equally.",payee.getUsername()+" is owed the full amount."};
         this.userReceiver = receiver;
         this.splitChoice = choices[choiceIndex-1];
 
@@ -82,8 +82,25 @@ public class Expense {
     public User getCreator() {
         return creator;
     }
-
+    public boolean isSettled() {
+        return this.settled;
+    }
+    public void settleExpense(){
+        this.settled=true;
+    }
     public LocalDateTime getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "payee=" + payee +
+                ", userReceiver=" + userReceiver +
+                ", creator=" + creator +
+                ", group=" + group +
+                ", amount=" + amount +
+                ", settled=" + settled +
+                '}';
     }
 }

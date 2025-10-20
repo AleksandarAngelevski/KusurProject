@@ -16,19 +16,19 @@ public class GroupNetBalances implements NetBalances{
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
-    private Double net_diff;
+    private Double netDiff;
     public GroupNetBalances() {}
     public GroupNetBalances(User user1, User user2,Group group) {
         this.user1 = user1;
         this.user2 = user2;
         this.group = group;
-        this.net_diff = 0.0;
+        this.netDiff = 0.0;
     }
     public void increaseDiff(Double sum){
-        this.net_diff+=sum;
+        this.netDiff+=sum;
     }
     public void decreaseDiff(Double sum){
-        this.net_diff-=sum;
+        this.netDiff-=sum;
     }
     public User getUser1() {
         return this.user1;
@@ -38,6 +38,6 @@ public class GroupNetBalances implements NetBalances{
     }
     public Group getGroup() {return this.group;}
     public Double getNet_diff() {
-        return net_diff;
+        return netDiff;
     }
 }

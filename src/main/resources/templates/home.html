@@ -30,26 +30,21 @@
                 <li th:each="friend : ${friends}" ><a th:href="@{'~/friends/' +${friend.username}}" th:text="${friend.username}"></a></li>
             </ul>
         </div>
-        <div class="groups-container">
-            <h3>Groups:</h3>
-            <button id="create-group-btn"><span id="plus-wrapper"><span id="one"></span><span id="two"></span></span> Create Group</button>
-            <ul>
-                <li th:each="group : ${groups}"><a th:text="${group.name}" th:href="@{'~/groups/'+ ${group.id}}"></a></li>
-            </ul>
+        <div class="addExpense-container">
+            <button id="add-expense-btn">Add Expense</button>
         </div>
     </div>
     <div class="middle">
+        <div class="settleExpenses-container">
+            <button id="settle-expense-btn">Settle Expense</button>
+        </div>
         <h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
         <div class="net-balances-container">
             <ul>
-                <li th:each="balance : ${userBalances}" th:text="${balance}"></li>
+                <li th:each="balance : ${userBalances}" th:text="${balance.message}" th:data-debtor="${balance.debtor.username}" th:data-debtee="${balance.debtee.username}"></li>
             </ul>
         </div>
-        <div class="group-net-balances-container">
-            <ul>
-                <li th:each="balance : ${groupBalances}" th:text="${balance}"></li>
-            </ul>
-        </div>
+        
         <div class="expenses-container">
             <div class="expense" th:each="expense : ${expenses}">
                 <h1 th:text="${expense.description}"></h1>
@@ -58,18 +53,32 @@
                 <li th:text="'Created by:'+${expense.creator}"></li>
             </ul></div>
         </div>
-    </div>
-    <div class="right">
-        <div class="addExpense-container">
-            <button id="add-expense-btn">Add Expense</button>
+        <div class="groups-container">
+            <div class="wrapper"><h3>Groups:</h3><button id="create-group-btn"><span id="plus-wrapper"><span id="one"></span><span id="two"></span></span> Create Group</button></div>
+            <div class="groups-container-wrapper">
+              <a th:href="@{'~/groups/'+ ${group.first.id}}" th:each="group : ${groups}">
+                <div class="group-wrapper">
+                    <h3 th:text="${group.first.name}"></h3>
+                    <span th:text="${group.second + 'MKD'}" th:classappend="${ group.second > 0 ? 'positive' : (group.second < 0 ? 'negative' : 'neutral')}"></span>
+                </div>
+            </a>
+            </div>
+            <!-- <ul>
+                <li th:each="group : ${groups}"><a th:text="${group.name}" th:href="@{'~/groups/'+ ${group.id}}"></a></li>
+            </ul> -->
         </div>
     </div>
-    
-    
     
 </div>
 
     <div id="overlay"></div>
+    <div class="settle-expense-modal">
+        <span id="close-btn-modal">Close</span>
+        <div class="settle-expense-modal-wrapper">
+            
+        </div>
+        
+    </div>
     <div class="add-expense-modal" style="display: none;">
         <div class="wrapper">
             <div class="row1">
@@ -103,5 +112,7 @@
     <span style="display:none;" sec:authentication="name" id="usernameeee">thymeleaf</span>
 <!-- <script  th:src="@{/script/expenseModlue.js}" type="module" src="../static/script/expenseModlue.js"></script> -->
 <script th:src="@{/script/home.js}" type="module" src="../static/script/home.js"></script>
+<script  th:src="@{/script/settleExpenseModule.js}" type="module" src="../static/script/settleExpenseModule.js"></script>
+<script  th:src="@{/script/loadingSpinnerModule.js}" type="module" src="../static/script/loadingSpinnerModule.js"></script>
 </body>
 </html>

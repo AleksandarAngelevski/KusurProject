@@ -10,6 +10,7 @@ import com.kusur.Kusur.security.CustomUserDetails;
 import com.kusur.Kusur.service.GroupService;
 import com.kusur.Kusur.service.NetBalanceCalculatorService;
 import com.kusur.Kusur.service.SplitExpenseService;
+import kotlin.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -61,11 +62,11 @@ public class MainController {
         f1.addAll(f2);
         List<Expense> expenses = splitExpenseService.getAllExpenses(principal.getUser());
         System.out.println(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()));
-        List<Group> groups = new ArrayList<>(groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).collect(Collectors.toList()));
+        List<Pair<Group,Integer>> groups = groupMembershipRepository.findGroupMembershipByMember(principal.getUser()).stream().map(m -> m.getGroup()).map((group)-> new Pair<Group,Integer>(group,netBalanceCalculatorService.getUserGroupBalance(group,principal.getUser()).intValue())).toList();
 
-        List<String> userNetBalances = netBalanceCalculatorService.getAllUserBalancesAsString(principal.getUser());
-        List<String> groupNetBalances = netBalanceCalculatorService.getAllGroupBalancesAsString(principal.getUser());
-        System.out.println(userNetBalances);
+        List<BalanceDto> userNetBalances = netBalanceCalculatorService.getAllUserBalances(principal.getUser());
+
+        System.out.println(groups);
         model.addAttribute("userBalances",userNetBalances);
         model.addAttribute("groups",groups);
         model.addAttribute("friends", f1);
@@ -101,7 +102,7 @@ public class MainController {
         model.addAttribute("group",groupObj);
         List<UserDetailsDto> users = groupService.getGroupMembers(groupRepository.findGroupById(id).orElseThrow());
         List<Expense> expenses = splitExpenseService.getGroupExpenses(principal.getUser(),groupObj);
-        List<BalanceDto> groupNetBalances =netBalanceCalculatorService.getGroupBalancesAsString(principal.getUser(),groupObj,false);
+        List<BalanceDto> groupNetBalances =netBalanceCalculatorService.getGroupBalances(principal.getUser(),groupObj,false);
         System.out.println(groupNetBalances +"\n GroupNetBalances");
         model.addAttribute("users",users);
         model.addAttribute("expenses",expenses);

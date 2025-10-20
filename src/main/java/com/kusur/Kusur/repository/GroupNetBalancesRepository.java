@@ -3,7 +3,6 @@ package com.kusur.Kusur.repository;
 import com.kusur.Kusur.model.Group;
 import com.kusur.Kusur.model.GroupNetBalances;
 import com.kusur.Kusur.model.User;
-import com.kusur.Kusur.model.UserNetBalances;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,8 +14,8 @@ public interface GroupNetBalancesRepository extends JpaRepository<GroupNetBalanc
     List<GroupNetBalances> getGroupNetBalancesByUser2AndGroup(User user, Group group);
     Optional<GroupNetBalances> getGroupNetBalancesByUser1AndUser2AndGroup(User user1,User user2,Group group);
     List<GroupNetBalances> getGroupNetBalancesByGroup(Group group);
-    List<UserNetBalances> findByUser1(User user);
-    List<UserNetBalances> findByUser2(User user);
+    List<GroupNetBalances> getGroupNetBalancesByGroupAndNetDiffIsNot(Group group, Double net_diff);
+
 
 
 }

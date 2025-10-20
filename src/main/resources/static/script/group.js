@@ -17,6 +17,7 @@ addExpenseButton.addEventListener("click",openExpenseModal);
 
 
 function openSettleExpenseModal(e){
+ 
     document.querySelector("#overlay").style.display = "block";
     settleExpenseModal.style.display = "block";
     SettleExpense.fillModal(document.querySelector("#groupId").textContent,document.querySelector(".settle-expense-modal .settle-expense-modal-wrapper"))
@@ -267,3 +268,4 @@ function insertExpense(expenseResponse){
     elem.insertAdjacentHTML("beforeend",list);
     document.querySelector(".expenses-container").insertAdjacentElement("afterbegin",elem)
 }
+

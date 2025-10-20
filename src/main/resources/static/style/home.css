@@ -24,7 +24,8 @@ body{
 }
 .container{
     width: 100%;
-    height: 100vh - 100px;
+    height: calc(100vh - 100px);
+    overflow-y: hidden;
     padding: 1rem 300px;
     display: flex;
     flex-direction: row;
@@ -34,11 +35,9 @@ body{
 .container .left{
     width: 30%;
 }
-.container .right{
-    width: 30%;
-}
 .container .middle{
-    width: 40%;
+    overflow-y: scroll;
+    width: 70%;
 }
 
 
@@ -183,14 +182,13 @@ nav .add-friend{
     align-items: center;
 }
 
-.container .left .friends-container ul,.container .left .groups-container ul{
+.container .left .friends-container ul,.container .middle .groups-container ul{
     list-style: none;
 }
-.container .left a{
+.container .left a,.container .middle a{
     color: black;
     text-decoration: none;
     font-size: 1.5rem;
-    padding: 0 .5rem;
 }
 .container .left a:visited{
     color: black;
@@ -202,7 +200,10 @@ nav .add-friend{
 .container .right .addExpense-container{
     width: 100%;
     height: 100%;
-
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: row;
 }
 .add-expense-modal{
     display: none;
@@ -313,17 +314,16 @@ nav .add-friend{
     width: 200px;
     height: 70px;
     display: flex;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    text-align: center;
     font-weight: 900;
-    border: 2px solid var(--main-color);
-    color: var(--main-color);
-    border-radius: 35px;
+    color: var(--neutral-color);
+    border-radius: 15px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    
-    background:none;
+    background-color: var(--accent-text-color);
     margin: .2rem;
     transition: all 0.2s ease-in-out;
 }
@@ -353,7 +353,7 @@ nav .add-friend{
     border-bottom-right-radius: 10px;
     width: 5px;
     height: 20px;
-    background-color: var(--main-color);
+    background-color: var(--neutral-color);
     position: absolute;
     left: 50%;
     top:50%;
@@ -370,13 +370,13 @@ nav .add-friend{
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     position: absolute;
-    background-color: var(--main-color);
+    background-color: var(--neutral-color);
 }
 
 .left .groups-container #create-group-btn{
     margin: 5px 0;
 }
-.left .friends-container h3,.left .groups-container h3{
+.left .friends-container h3{
     font-size: 3rem;
 }
 
@@ -428,4 +428,178 @@ nav .add-friend{
 }
 .groupExpensePayeeWrapper .payee.active{
     background-color: #f47c5c;
+}
+
+
+.settleExpenses-container #settle-expense-btn{
+    font-size: 1.1rem;
+    padding: 1rem;
+    border-radius: 30px;
+    color: #FFFFFF;
+    background-color: var(--accent-color);
+    border: none;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    margin: 0 auto;
+}
+.settleExpenses-container #settle-expense-btn:hover{
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8704a;
+}
+
+.settle-expense-modal{
+    display: none;
+    width: 500px;
+    min-height: 350px;
+    background-color: var(--main-color);
+    border-radius: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1000;
+    padding: 4% 1.5rem 1.5rem 1.5rem;
+}
+.settle-expense-modal #close-btn-modal{
+    position: absolute;
+    left: 90%;
+    top: 5%;
+    
+}
+.settle-expense-modal #close-btn-modal:hover{
+    cursor: pointer;
+}
+.settle-expense-modal-wrapper{
+    display: block;
+}
+
+
+.loading-spinner-wrapper{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.loading-spinner{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border: 8px solid var(--main-color);
+    border-radius: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+    animation: rotateSpinner .9s linear infinite;
+    border-bottom-color: transparent;
+    
+}
+.loading-spinner-child{
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    border: 5px solid var(--accent-color);
+    border-top-color: transparent;
+    left: 50%;
+    top:50%;
+    position: absolute;
+    animation: rotateSpinner 3s linear infinite;
+    animation-direction: reverse;
+}
+
+.settlementWindow{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.balance-item-wrapper{
+    transition: all .3s ease;
+}
+.balance-item-wrapper .balance-item{
+    text-align: center;
+}
+
+.settleExpenses-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settleExpenses-container #settle-expense-btn{
+    font-size: 1.1rem;
+    padding: 1rem;
+    border-radius: 30px;
+    color: #FFFFFF;
+    background-color: var(--accent-color);
+    border: none;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    margin: 0 auto;
+}
+.settleExpenses-container #settle-expense-btn:hover{
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8704a;
+}
+.groups-container-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.groups-container-wrapper .group-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    min-height: 150px;
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: var(--main-color);
+    width: 200px;
+}
+
+.groups-container-wrapper .group-wrapper > *{
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+.groups-container-wrapper .group-wrapper span{
+    background-color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: black;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.groups-container-wrapper .group-wrapper span.positive{
+    color: darkgreen;
+    background-color: rgb(130, 255, 130);
+}
+.groups-container-wrapper .group-wrapper span.negative{
+    color: darkred;
+    background-color: rgb(255, 133, 133);
+}
+.groups-container-wrapper .group-wrapper span.neutral{
+    color: black;
+    background-color: lightgray;
+}
+.groups-container .wrapper{
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;;
+}
+.middle .groups-container .wrapper h3{
+    font-size: 2rem;
 }

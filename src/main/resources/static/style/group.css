@@ -130,7 +130,9 @@ nav #dashboardLink{
 .addExpense-container, .settleExpenses-container{
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+
+    flex-direction: row;
 }
 .addExpense-container #add-expense-btn{
     font-size: 1.4rem;
@@ -313,3 +315,22 @@ nav #dashboardLink{
     animation-direction: reverse;
 }
 
+.settlementWindow{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.balance-item-wrapper{
+    transition: all .3s ease;
+}
+.balance-item-wrapper .balance-item{
+    text-align: center;
+}
+
+
+@media only screen and (max-width: 1400px) {
+    .container,nav{
+        padding: 1rem 100px;
+    }
+  }

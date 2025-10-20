@@ -1,5 +1,8 @@
+
 const priceField = document.querySelector(".add-expense-modal .wrapper input");
 const reg= /^[1-9]\d*(\.\d+)?$/;
+
+
 let id=null;
 let splitChoicesModalExpanded=false;
 let activeChoice=null;
@@ -196,7 +199,7 @@ function expandExpenseModal(e){
     wrapper.insertAdjacentElement("beforeend",choice2)
     wrapper.insertAdjacentElement("beforeend",choice3)
     wrapper.insertAdjacentElement("beforeend",choice4)
-    document.querySelector(".wrapper").style.height=document.querySelector(".wrapper").scrollHeight+"px";
+    document.querySelector(".add-expense-modal .wrapper").style.height=document.querySelector(".add-expense-modal .wrapper").scrollHeight+"px";
 }
 export async function shrinkExpenseModal(timeoutValue){
     console.log("Shrink expense modal")
@@ -282,36 +285,38 @@ export function groupExpenseSplit(event){
         groupExpensePayeeWrapper.addEventListener("click",selectPayee);
         groupExpensePayeeWrapper.classList.add("groupExpensePayeeWrapper");
         groupExpenseDto.payee = activeGroupPayee.getAttribute("username");
-        if(document.querySelector(".groupExpensePayeeWrapper")!=null){
-            document.querySelector(".groupExpensePayeeWrapper").remove();
-        }
-        groupExpensePayeeWrapper.insertAdjacentElement("beforeend",activeGroupPayee);
         
         console.log("A")
-        insertDefaultChoice(groupExpensePayeeWrapper)
         
+        setTimeout(()=>{
+            if(document.querySelector(".groupExpensePayeeWrapper")!=null){
+                document.querySelector(".groupExpensePayeeWrapper").remove();
+            }
+            groupExpensePayeeWrapper.insertAdjacentElement("beforeend",activeGroupPayee);
+            insertDefaultChoice(groupExpensePayeeWrapper)
+        },50)
         
     }else{
         console.log("B")
-        setToHeight(document.querySelector(".wrapper","100px"))
+        setToHeight(document.querySelector(".add-expense-modal .wrapper"),"100px");
         insertDefaultChoice(groupExpensePayeeWrapper);
-        setToHeight(document.querySelector(".wrapper","149px"))
+        setToHeight(document.querySelector(".add-expense-modal .wrapper"),"149px");
     }
 }
-function selectSplitChoiceGroupExpense(e){
-
-}
-function setToHeight(element,height){
+async function setToHeight(element,height){
     
-    element.style.height=height;
-    console.log("height "+ element.style.height);
-    console.log("element ");
-    console.log(element);
+    return new Promise((resolve)=>{
+        element.style.height=height;
+        console.log("height "+ element.style.height);
+        console.log("element ");
+        console.log(element);
+    });
 }
 function insertDefaultChoice(elementNode){
     
     setTimeout(()=>{
-        setToHeight(document.querySelector(".wrapper"),"100px")
+        console.log("insert default choice set to 100px");
+        setToHeight(document.querySelector(".add-expense-modal .wrapper"),"100px")
         groupExpenseDto.payee = activeGroupPayee.getAttribute("username");
         console.log("Insert default choice group expense");
         let wrapperElement = document.querySelector(".add-expense-modal .wrapper");
@@ -322,7 +327,7 @@ function insertDefaultChoice(elementNode){
         wrapperElement.insertAdjacentElement("beforeend",elementNode);
         console.log(wrapperElement.scrollHeight);
         wrapperElement.offsetHeight;    
-        shrinkElement(document.querySelector(".wrapper"),"149px");
+        shrinkElement(document.querySelector(".add-expense-modal .wrapper"),"149px");
     },50)
 }
 
@@ -379,8 +384,8 @@ function selectPayee(e){
             activeGroupPayee.classList.toggle("active")
             groupExpenseDto.payee=activeGroupPayee.getAttribute("username");
             console.log(groupExpenseDto);
-            setToHeight(document.querySelector(".wrapper"),"149px");
-            groupExpenseSplit(e);
+            setToHeight(document.querySelector(".add-expense-modal .wrapper"),"149px").then(groupExpenseSplit(e));
+            
             
 
         }

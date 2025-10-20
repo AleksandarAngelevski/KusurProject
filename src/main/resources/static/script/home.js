@@ -1,5 +1,5 @@
 import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup, shrinkExpenseModal, collapseExpenseSplitModal,clearSplitChoice, binaryExpenseSplit,groupExpenseSplit,createPayeeChoices} from "./expenseModlue.js";
-
+import * as SettleExpense from "./settleExpenseModule.js"
 
 let arr;
 let groupName;
@@ -8,6 +8,16 @@ const add_friend_button = document.querySelector("#add-friend-btn")
 const add_friend_input_field = document.querySelector("#add-friend-field")
 const createGroupBtn = document.querySelector("#create-group-btn");
 const add_expense_btn = document.querySelector("#add-expense-btn")
+
+
+let settleExpenseButton = document.querySelector("#settle-expense-btn");
+settleExpenseButton.addEventListener("click",openSettleExpenseModal);
+let settleExpenseModal  = document.querySelector(".settle-expense-modal");
+let closeSettleExpenseModalBtn = document.querySelector(".settle-expense-modal #close-btn-modal");
+closeSettleExpenseModalBtn.addEventListener("click",closeSettleExpenseModal);
+
+
+
 
 document.querySelector(".add-expense-modal .wrapper button").addEventListener("click",addExpense);
 
@@ -31,7 +41,6 @@ async function send_request(){
         },
         body: JSON.stringify({username:add_friend_input_field.value.trim()}),
     }).then(response => response.text()).then(data => alert(data)).finally();
-    alert(response.statusText);
 }
 
 
@@ -96,7 +105,7 @@ function closeModal(e){
     document.querySelector(".add-expense-modal .wrapper input").value="";
     document.querySelector(".add-expense-modal .wrapper #description").value="";
     if(document.querySelector(".expenseSplits")!= null)document.querySelector(".expenseSplits").remove();
-    document.querySelector(".wrapper").style.height="100px";
+    document.querySelector(".add-expense-modal .wrapper").style.height="100px";
     document.body.style.overflow="auto";
     clearGroup();
     clearUser();
@@ -304,7 +313,11 @@ async function selectGroup(e){
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin":"*",
         }
-    }).then(response => response.json()).then(data => {insertMembers(data);createPayeeChoices(data);collapseExpenseSplitModal().then(()=>groupExpenseSplit(e));});
+    }).then(response => response.json()).then(data => {
+        insertMembers(data);
+        createPayeeChoices(data);
+        collapseExpenseSplitModal().then(()=>groupExpenseSplit(e));
+    });
     }
 }
 
@@ -329,6 +342,21 @@ function insertMembers(members){
 
 
 
-function animateHeight(element){
 
+function openSettleExpenseModal(e){
+    document.querySelector("#overlay").style.display = "block";
+    settleExpenseModal.style.display = "block";
+    SettleExpense.fillModal(null,document.querySelector(".settle-expense-modal .settle-expense-modal-wrapper"))
+}
+
+
+function closeSettleExpenseModal(e){
+    document.querySelector("#overlay").style.display = "none";
+    settleExpenseModal.style.display = "none";
+    clearSettleExpenseModal();
+}
+
+
+function clearSettleExpenseModal(e){
+    document.querySelector(".settle-expense-modal-wrapper").textContent = "";
 }
