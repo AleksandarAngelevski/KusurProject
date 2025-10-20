@@ -78,7 +78,7 @@ async function fetchNetBalances(){
     try{
         const host = window.location.host;
         const token = localStorage.getItem("token");
-        const netBalances = await fetch("http://"+host+"/netBalances",{
+        const netBalances = await fetch("https://"+host+"/netBalances",{
             method: "GET",
             credentials: "include",
             headers:{
