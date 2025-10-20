@@ -2,27 +2,27 @@ package com.kusur.Kusur.model;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
-
 @Entity
-public class UserNetBalances implements NetBalances{
+public class GroupNetBalances implements NetBalances{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user1")
+    @JoinColumn(name = "user1_id")
     private User user1;
     @ManyToOne
-    @JoinColumn(name ="user2")
+    @JoinColumn(name="user2_id")
     private User user2;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
     private Double netDiff;
-    public UserNetBalances() {
-
-    }
-    public UserNetBalances(User user1, User user2) {
+    public GroupNetBalances() {}
+    public GroupNetBalances(User user1, User user2,Group group) {
         this.user1 = user1;
         this.user2 = user2;
-        this.netDiff = 0.00;
+        this.group = group;
+        this.netDiff = 0.0;
     }
     public void increaseDiff(Double sum){
         this.netDiff+=sum;
@@ -36,6 +36,7 @@ public class UserNetBalances implements NetBalances{
     public User getUser2() {
         return this.user2;
     }
+    public Group getGroup() {return this.group;}
     public Double getNet_diff() {
         return netDiff;
     }

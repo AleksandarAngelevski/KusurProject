@@ -12,6 +12,11 @@ import java.util.List;
 public interface ExpenseRepository extends JpaRepository<Expense,Long> {
     public Expense findById(long id);
     public List<Expense> findByGroup(Group group);
-    public List<Expense> findByCreator(User user);
-    public List<Expense> findByUserReceiver(User user);
+    public List<Expense> findByCreatorAndGroupIsNullAndSettled(User user,Boolean settled);
+    public List<Expense> findByUserReceiverAndGroupIsNull(User user);
+    public List<Expense> findByPayeeAndGroupIsNullAndSettled(User user,Boolean settled);
+    public List<Expense> findExpenseByGroupAndSettled(Group group,Boolean settled);
+    public List<Expense> findExpenseByPayeeAndGroupIsNullAndSettled(User user,Boolean settled);
+    public List<Expense> findExpenseByUserReceiverAndGroupIsNullAndSettled(User user,Boolean settled);
+
 }

@@ -1,5 +1,5 @@
-import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup,expenseSplit, shrinkExpenseModal, collapseExpenseModal,clearSplitChoice} from "./expenseModlue.js";
-
+import { addPersonToExpense,addExpense,addUserToExpense,clearUser,getGroupId, clearGroup, shrinkExpenseModal, collapseExpenseSplitModal,clearSplitChoice, binaryExpenseSplit,groupExpenseSplit,createPayeeChoices} from "./expenseModlue.js";
+import * as SettleExpense from "./settleExpenseModule.js"
 
 let arr;
 let groupName;
@@ -8,6 +8,16 @@ const add_friend_button = document.querySelector("#add-friend-btn")
 const add_friend_input_field = document.querySelector("#add-friend-field")
 const createGroupBtn = document.querySelector("#create-group-btn");
 const add_expense_btn = document.querySelector("#add-expense-btn")
+
+
+let settleExpenseButton = document.querySelector("#settle-expense-btn");
+settleExpenseButton.addEventListener("click",openSettleExpenseModal);
+let settleExpenseModal  = document.querySelector(".settle-expense-modal");
+let closeSettleExpenseModalBtn = document.querySelector(".settle-expense-modal #close-btn-modal");
+closeSettleExpenseModalBtn.addEventListener("click",closeSettleExpenseModal);
+
+
+
 
 document.querySelector(".add-expense-modal .wrapper button").addEventListener("click",addExpense);
 
@@ -21,16 +31,16 @@ async function send_request(){
     }
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/add-friend",{
+    const response = await fetch("http://"+host+"/add-friend",{
         method: "POST",
         credentials: "include",
         headers:{
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
+            "Access-Control-Allow-Origin":"*",
         },
         body: JSON.stringify({username:add_friend_input_field.value.trim()}),
     }).then(response => response.text()).then(data => alert(data)).finally();
-    alert(response.statusText);
 }
 
 
@@ -52,12 +62,13 @@ function addUserToGroup(e){
 async function openGroupCreationModal(e){
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/get-friends",{
+    const response = await fetch("http://"+host+"/get-friends",{
         method: "GET",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
 
         }
         
@@ -94,7 +105,7 @@ function closeModal(e){
     document.querySelector(".add-expense-modal .wrapper input").value="";
     document.querySelector(".add-expense-modal .wrapper #description").value="";
     if(document.querySelector(".expenseSplits")!= null)document.querySelector(".expenseSplits").remove();
-    document.querySelector(".wrapper").style.height="100px";
+    document.querySelector(".add-expense-modal .wrapper").style.height="100px";
     document.body.style.overflow="auto";
     clearGroup();
     clearUser();
@@ -121,12 +132,13 @@ async function makeRequest(e){
     const host = window.location.host;
     
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/group/create",{
+    const response = await fetch("http://"+host+"/group/create",{
         method: "POST",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
 
         },
         body:JSON.stringify({
@@ -146,24 +158,26 @@ async function openExpenseModal(e) {
 
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("https://"+host+"/get-friends",{
+    const response = await fetch("http://"+host+"/get-friends",{
         method: "GET",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
 
         }
         
-    }).then(response => response.text()).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
+    }).then(response => response.text()).then(document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>People:</h3>")).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>Groups:</h3>")
         });
-    const response2 = await fetch("https://"+host+"/group/getAll",{
+    const response2 = await fetch("http://"+host+"/group/getAll",{
         method:"GET",
         credentials:"include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
         }
     }).then(response2 => response2.json()).then(data => insertGroups(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector("#overlay").style.display="block";
@@ -254,16 +268,20 @@ function select(e){
 function selectUser(e){
     clearGroup();
     clearUser();
+    console.log("Active element ")
+    console.log(activeElement)
     if(activeElement===e.target.parentElement){
-        collapseExpenseModal();    
+        collapseExpenseSplitModal();    
     }else if(activeElement===null){
+        
         addUserToExpense(e.target.textContent);
-        expenseSplit(document.querySelector(".add-expense-modal .wrapper"))
+        binaryExpenseSplit(document.querySelector(".add-expense-modal .wrapper"))
     }
     else{
-        shrinkExpenseModal(3);
+        collapseExpenseSplitModal().then(()=>{binaryExpenseSplit(document.querySelector(".add-expense-modal .wrapper"))});
         clearSplitChoice();
         addUserToExpense(e.target.textContent);
+        
     }
     select(e);
     
@@ -272,32 +290,39 @@ function selectUser(e){
 }
 async function selectGroup(e){
     clearSplitChoice();
-    collapseExpenseModal();
+    
     clearUser();
+    
     if(activeElement===e.target.parentElement){
         clearGroup();
         select(e);
-        
+        collapseExpenseSplitModal();
     }else{
+        clearGroup();
+        console.log("SelectGroup");
         getGroupId(e);
         select(e);
         const host = window.location.host;
         const token = localStorage.getItem("token");
         const id = e.target.getAttribute("id");
-        const response = await fetch("https://"+host+"/group/"+id+"/members",{
+        const response = await fetch("http://"+host+"/group/"+id+"/members",{
         method: "GET",
         credentials: "include",
         headers:{
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*",
         }
-    }).then(response => response.json()).then(data => insertMembers(data));
+    }).then(response => response.json()).then(data => {
+        insertMembers(data);
+        createPayeeChoices(data);
+        collapseExpenseSplitModal().then(()=>groupExpenseSplit(e));
+    });
     }
 }
 
 function insertMembers(members){
     startHeight = activeElement.offsetHeight;
-    console.log(members);
     let ul = document.createElement("ul");
     members.forEach((e)=>{
         let li = document.createElement("li");
@@ -317,6 +342,21 @@ function insertMembers(members){
 
 
 
-function animateHeight(element){
 
+function openSettleExpenseModal(e){
+    document.querySelector("#overlay").style.display = "block";
+    settleExpenseModal.style.display = "block";
+    SettleExpense.fillModal(null,document.querySelector(".settle-expense-modal .settle-expense-modal-wrapper"))
+}
+
+
+function closeSettleExpenseModal(e){
+    document.querySelector("#overlay").style.display = "none";
+    settleExpenseModal.style.display = "none";
+    clearSettleExpenseModal();
+}
+
+
+function clearSettleExpenseModal(e){
+    document.querySelector(".settle-expense-modal-wrapper").textContent = "";
 }

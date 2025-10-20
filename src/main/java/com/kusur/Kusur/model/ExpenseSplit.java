@@ -40,4 +40,7 @@ public class ExpenseSplit {
     public void settle(){
         this.settled = true;
     }
+    public void increaseAmount(Double amount){
+        this.amount = this.amount + amount;
+    }
 }

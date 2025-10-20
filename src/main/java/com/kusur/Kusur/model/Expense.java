@@ -24,24 +24,43 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userReceiver;
+    @ManyToOne
+    @JoinColumn(name = "payee_id")
+    private User payee;
     private LocalDateTime date;
-    public Expense(String description, Double amount,User creator) {
+    private Boolean settled;
+
+    public User getPayee() {
+        return payee;
+    }
+
+    public void setPayee(User payee) {
+        this.payee = payee;
+    }
+
+
+    public Expense(String description, Double amount,User creator,User payee) {
         this.description = description;
         this.amount = amount;
         this.creator = creator;
         this.group = null;
+        this.payee = payee;
         this.userReceiver = null;
         this.date = LocalDateTime.now();
         this.splitChoice=null;
+        this.settled=false;
     }
     public Expense() {}
     public void buildSingleExpense(User receiver,Integer choiceIndex) {
-        String[] choices ={"You paid, split equally.","You are owed the full amount.",receiver.getUsername()+" paid,split equally.",receiver.getUsername()+" is owed the full amount."};
+        String[] choices ={"You paid, split equally.","You are owed the full amount.",payee.getUsername()+" paid,split equally.",payee.getUsername()+" is owed the full amount."};
         this.userReceiver = receiver;
         this.splitChoice = choices[choiceIndex-1];
 
     }
-    public void buildGroupExpense(Group group) {
+    public Integer getId() {
+        return this.id;
+    }
+    public void buildGroupExpense(Group group,User receiver) {
         this.group = group;
     }
     public Double getAmount() {
@@ -63,8 +82,25 @@ public class Expense {
     public User getCreator() {
         return creator;
     }
-
+    public boolean isSettled() {
+        return this.settled;
+    }
+    public void settleExpense(){
+        this.settled=true;
+    }
     public LocalDateTime getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "payee=" + payee +
+                ", userReceiver=" + userReceiver +
+                ", creator=" + creator +
+                ", group=" + group +
+                ", amount=" + amount +
+                ", settled=" + settled +
+                '}';
     }
 }
