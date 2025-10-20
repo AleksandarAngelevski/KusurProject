@@ -95,7 +95,7 @@ async function getGroupMembers(){
     const host = window.location.host;
     const token = localStorage.getItem("token");
     const id = document.querySelector("#groupId").textContent;  
-    const response = await fetch("http://"+host+"/group/"+id+"/members",{
+    const response = await fetch("https://"+host+"/group/"+id+"/members",{
             method: "GET",
             credentials: "include",
             headers:{
@@ -127,7 +127,7 @@ function populatePayeeModal(membersArray){
 async function getGroupBalances(){
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("http://"+host+"/group/balances/"+document.querySelector("#groupId").textContent,{
+    const response = await fetch("https://"+host+"/group/balances/"+document.querySelector("#groupId").textContent,{
             method: "GET",
             credentials: "include",
             headers:{
@@ -183,7 +183,7 @@ async function addGroupExpense(e){
     else{
         const host = window.location.host;
         const token = localStorage.getItem("token");
-        const response = await fetch("http://"+host+"/expense/add",{
+        const response = await fetch("https://"+host+"/expense/add",{
             method: "POST",
             credentials: "include",
             headers:{
