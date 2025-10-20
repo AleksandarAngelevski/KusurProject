@@ -31,7 +31,7 @@ async function send_request(){
     }
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("http://"+host+"/add-friend",{
+    const response = await fetch("https://"+host+"/add-friend",{
         method: "POST",
         credentials: "include",
         headers:{
@@ -62,7 +62,7 @@ function addUserToGroup(e){
 async function openGroupCreationModal(e){
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("http://"+host+"/get-friends",{
+    const response = await fetch("https://"+host+"/get-friends",{
         method: "GET",
         credentials: "include",
         headers:{
@@ -132,7 +132,7 @@ async function makeRequest(e){
     const host = window.location.host;
     
     const token = localStorage.getItem("token");
-    const response = await fetch("http://"+host+"/group/create",{
+    const response = await fetch("https://"+host+"/group/create",{
         method: "POST",
         credentials: "include",
         headers:{
@@ -158,7 +158,7 @@ async function openExpenseModal(e) {
 
     const host = window.location.host;
     const token = localStorage.getItem("token");
-    const response = await fetch("http://"+host+"/get-friends",{
+    const response = await fetch("https://"+host+"/get-friends",{
         method: "GET",
         credentials: "include",
         headers:{
@@ -171,7 +171,7 @@ async function openExpenseModal(e) {
     }).then(response => response.text()).then(document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>People:</h3>")).then(data => insertChoices(data)).catch(err => console.log(err)).finally(()=>{
         document.querySelector(".choices").insertAdjacentHTML("beforeend","<h3>Groups:</h3>")
         });
-    const response2 = await fetch("http://"+host+"/group/getAll",{
+    const response2 = await fetch("https://"+host+"/group/getAll",{
         method:"GET",
         credentials:"include",
         headers:{
@@ -305,7 +305,7 @@ async function selectGroup(e){
         const host = window.location.host;
         const token = localStorage.getItem("token");
         const id = e.target.getAttribute("id");
-        const response = await fetch("http://"+host+"/group/"+id+"/members",{
+        const response = await fetch("https://"+host+"/group/"+id+"/members",{
         method: "GET",
         credentials: "include",
         headers:{

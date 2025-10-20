@@ -53,7 +53,7 @@ async function fetchGroupNetBalances(groupId){
     try{
         const host = window.location.host;
         const token = localStorage.getItem("token");
-        const groupBalances = await fetch("http://"+host+"/group/balances/user/"+groupId,{
+        const groupBalances = await fetch("https://"+host+"/group/balances/user/"+groupId,{
             method: "GET",
             credentials: "include",
             headers:{
@@ -200,7 +200,7 @@ async function sendSettlePaymentRequest(settlementData){
     try{ /* Send the required data to the backend */
         const host = window.location.host;
         const token = localStorage.getItem("token");
-        let response = await fetch("http://"+host+"/settlePayment",{
+        let response = await fetch("https://"+host+"/settlePayment",{
             method: "POST",
             credentials: "include",
             headers:{   
